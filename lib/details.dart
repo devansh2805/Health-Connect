@@ -4,6 +4,7 @@ import 'package:health_connect/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 class NamePage extends StatefulWidget {
   @override
@@ -14,11 +15,27 @@ class NamePage extends StatefulWidget {
 
 class NamePageState extends State<NamePage> {
   late TextEditingController _nameController;
-
+  int _userType = 1;
+  int _gender = 1;
+  DateTime selectedDate = DateTime(DateTime.now().year);
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+  }
+
+  _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(DateTime.now().year - 100),
+      lastDate: DateTime(DateTime.now().year),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -41,7 +58,7 @@ class NamePageState extends State<NamePage> {
             ),
             Center(
               child: Text(
-                "Enter your Name",
+                "Personal Details",
                 style: GoogleFonts.roboto(
                   color: Colors.grey,
                   fontSize: 30,
@@ -62,7 +79,60 @@ class NamePageState extends State<NamePage> {
               ),
             ),
             const SizedBox(
-              height: 50.0,
+              height: 30.0,
+            ),
+            DropdownButton(
+              value: _userType,
+              items: const [
+                DropdownMenuItem(
+                  child: Text("Doctor"),
+                  value: 1,
+                ),
+                DropdownMenuItem(
+                  child: Text("Patient"),
+                  value: 2,
+                )
+              ],
+              hint: const Text("Select User Type"),
+              onChanged: (int? value) {
+                setState(() {
+                  _userType = value!;
+                });
+              },
+            ),
+            const SizedBox(
+              height: 30.0,
+            ),
+            DropdownButton(
+              value: _gender,
+              items: const [
+                DropdownMenuItem(
+                  child: Text("Male"),
+                  value: 1,
+                ),
+                DropdownMenuItem(
+                  child: Text("Female"),
+                  value: 2,
+                ),
+                DropdownMenuItem(
+                  child: Text("Other"),
+                  value: 3,
+                )
+              ],
+              hint: const Text("Select Gender"),
+              onChanged: (int? value) {
+                setState(() {
+                  _gender = value!;
+                });
+              },
+            ),
+            ElevatedButton(
+              onPressed: () => _selectDate(context),
+              child: const Text(
+                'Pick Date',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
             TextButton(
               style: ButtonStyle(
@@ -78,9 +148,9 @@ class NamePageState extends State<NamePage> {
                 ),
               ),
               onPressed: () async {
-                if (_nameController.text == '') {
+                if (selectedDate == DateTime.now()) {
                   Fluttertoast.showToast(
-                    msg: "Name Cannot be Empty",
+                    msg: "Please select your date of birth",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     backgroundColor: Colors.red,
@@ -88,24 +158,38 @@ class NamePageState extends State<NamePage> {
                     fontSize: 16.0,
                   );
                 } else {
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .set({
-                    'uid': FirebaseAuth.instance.currentUser!.uid,
-                    'name': _nameController.text,
-                    'phoneNumber':
-                        FirebaseAuth.instance.currentUser!.phoneNumber,
-                  });
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return const MyHomePage(
-                          title: 'Health Connect',
-                        );
-                      },
-                    ),
-                  );
+                  if (_nameController.text == '') {
+                    Fluttertoast.showToast(
+                      msg: "Name Cannot be Empty",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  } else {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({
+                      'uid': FirebaseAuth.instance.currentUser!.uid,
+                      'name': _nameController.text,
+                      'phoneNumber':
+                          FirebaseAuth.instance.currentUser!.phoneNumber,
+                      'userType': _userType,
+                      'gender': _gender,
+                      'birthday': selectedDate
+                    });
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return const MyHomePage(
+                            title: 'Health Connect',
+                          );
+                        },
+                      ),
+                    );
+                  }
                 }
               },
               child: const Text(
