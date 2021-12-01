@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_connect/login.dart';
+import 'package:health_connect/patient_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: FirebaseAuth.instance.currentUser == null
           ? LoginPage()
-          : const MyHomePage(title: 'Health Connect'),
+          : HomeScreen(),
     );
   }
 }

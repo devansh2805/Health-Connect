@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
+import 'package:health_connect/patient_screen.dart';
+
 class NamePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -183,9 +185,7 @@ class NamePageState extends State<NamePage> {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return const MyHomePage(
-                            title: 'Health Connect',
-                          );
+                          return HomeScreen();
                         },
                       ),
                     );
