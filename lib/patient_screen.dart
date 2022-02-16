@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
-import 'package:health_connect/widgets/card_items.dart';
 import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -41,27 +41,33 @@ class HomeScreen extends StatelessWidget {
               children: <Widget>[
                 // Header - Greetings and Avatar
                 Row(
-                  children: const <Widget>[
-                    Expanded(
+                  children: <Widget>[
+                    const Expanded(
                       child: Text(
-                        "Good Morning,\nPatient",
+                        "Hi,\nPatient",
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.w900,
                             color: Colors.white),
                       ),
                     ),
-                    CircleAvatar(
+                    GestureDetector(
+                      onTap: () {
+                        print("Tapped");
+                      },
+                      child: const CircleAvatar(
                         radius: 26.0,
                         backgroundImage:
-                            AssetImage('assets/icons/profile_picture.png'))
+                            AssetImage('assets/icons/default_picture.png'),
+                      ),
+                    ),
                   ],
                 ),
 
                 const SizedBox(height: 80),
 
                 // Main Cards - Heartbeat and Blood Pressure
-                Container(
+                SizedBox(
                   height: 200,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -101,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 20),
-                Container(
+                SizedBox(
                     height: 150,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
@@ -134,7 +140,7 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Stack(
-                    overflow: Overflow.clip,
+                    clipBehavior: Clip.hardEdge,
                     children: <Widget>[
                       Positioned(
                         child: ClipPath(

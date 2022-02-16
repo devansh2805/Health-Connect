@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:health_connect/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:async';
 
 import 'package:health_connect/patient_screen.dart';
 
 class NamePage extends StatefulWidget {
+  const NamePage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return new NamePageState();
+    return NamePageState();
   }
 }
 
@@ -185,7 +185,7 @@ class NamePageState extends State<NamePage> {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return HomeScreen();
+                          return const HomeScreen();
                         },
                       ),
                     );

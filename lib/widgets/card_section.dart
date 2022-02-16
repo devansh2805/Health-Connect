@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
@@ -26,8 +25,7 @@ class CardSection extends StatelessWidget {
           color: Colors.white,
         ),
         child: Stack(
-          overflow: Overflow.clip,
-          children: <Widget>[
+          clipBehavior: Clip.hardEdge, children: <Widget>[
             Positioned(
               child: ClipPath(
                 clipper: MyCustomClipper(clipType: ClipType.semiCircle),

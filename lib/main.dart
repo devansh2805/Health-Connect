@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+// import 'dart:async';
 // import 'dart:convert';
 // import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
       ),
       home: FirebaseAuth.instance.currentUser == null
-          ? LoginPage()
-          : HomeScreen(),
+          ? const LoginPage()
+          : const HomeScreen(),
     );
   }
 }
@@ -41,14 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

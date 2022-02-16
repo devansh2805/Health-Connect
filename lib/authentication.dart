@@ -1,30 +1,48 @@
+import 'package:health_connect/database.dart';
 import 'package:health_connect/details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_connect/patient_screen.dart';
 
 class Auth {
   Future<void> loginUser(String phoneNumber, BuildContext context) async {
     final TextEditingController _codeController = TextEditingController();
     final FirebaseAuth _auth = FirebaseAuth.instance;
+
     _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      timeout: const Duration(seconds: 60),
+      timeout: const Duration(
+        seconds: 60,
+      ),
       verificationCompleted: (AuthCredential credential) async {
+        /*
         Navigator.of(context).pop();
         UserCredential userCredential =
             await _auth.signInWithCredential(credential);
+
         User? user = userCredential.user;
         if (user != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return NamePage();
-              },
-            ),
-          );
+          if (await Database().userAlreadyRegistered(user.phoneNumber)) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return HomeScreen();
+                },
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return NamePage();
+                },
+              ),
+            );
+          }
         } else {
           Fluttertoast.showToast(
             msg: "Authentication Error",
@@ -34,7 +52,7 @@ class Auth {
             textColor: Colors.white,
             fontSize: 16.0,
           );
-        }
+        } */
       },
       verificationFailed: (FirebaseAuthException authException) {
         _showAlertDialog(context, authException.code);
@@ -45,7 +63,7 @@ class Auth {
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              title: Text("Enter Code"),
+              title: const Text("Enter Code"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -64,16 +82,29 @@ class Auth {
                     );
                     UserCredential userCredential =
                         await _auth.signInWithCredential(credential);
+
                     User? user = userCredential.user;
                     if (user != null) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return NamePage();
-                          },
-                        ),
-                      );
+                      if (await Database()
+                          .userAlreadyRegistered(user.phoneNumber)) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const HomeScreen();
+                            },
+                          ),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const NamePage();
+                            },
+                          ),
+                        );
+                      }
                     } else {
                       Fluttertoast.showToast(
                         msg: "Authentication Error",
@@ -111,7 +142,7 @@ class Auth {
           content: Text(msg),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.pop(context);
               },

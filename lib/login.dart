@@ -5,6 +5,8 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'authentication.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return LoginPageState();

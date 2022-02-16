@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:mediapp/screens/detail_screen.dart';
 import 'package:health_connect/const.dart';
-import 'package:health_connect/widgets/custom_clipper.dart';
 
 class ProgressVertical extends StatelessWidget {
   final int value;
   final String date;
   final bool isShowDate;
 
-  ProgressVertical(
+  const ProgressVertical(
       {Key? key,
       required this.value,
       required this.date,

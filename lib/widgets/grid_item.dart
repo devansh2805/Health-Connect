@@ -10,7 +10,7 @@ class GridItem extends StatelessWidget {
   final Color color;
   final String remarks;
 
-  GridItem({
+  const GridItem({
     Key? key,
     required this.status,
     required this.value,
@@ -39,7 +39,7 @@ class GridItem extends StatelessWidget {
               children: <Widget>[
                 Text(
                   status,
-                  style: TextStyle(fontSize: 12, color: Constants.textPrimary),
+                  style: const TextStyle(fontSize: 12, color: Constants.textPrimary),
                 ),
                 Text(
                   time,

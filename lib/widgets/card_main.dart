@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:health_connect/screens/detail_screen.dart';
 import 'package:health_connect/const.dart';

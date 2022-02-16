@@ -12,7 +12,7 @@ class MyCustomClipper extends CustomClipper<Path> {
 
   @override
   getClip(Size size) {
-    var path = new Path();
+    var path = Path();
     if (clipType == ClipType.bottom) {
       createBottom(size, path);
     } else if (clipType == ClipType.semiCircle) {

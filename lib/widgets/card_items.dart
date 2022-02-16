@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
@@ -11,7 +10,7 @@ class CardItems extends StatelessWidget {
   final Color color;
   final int progress;
 
-  CardItems({
+  const CardItems({
     Key? key,
     required this.image,
     required this.title,
@@ -54,7 +53,7 @@ class CardItems extends StatelessWidget {
               children: <Widget>[
                 // Icon and Hearbeat
                 image,
-                SizedBox(width: 30),
+                const SizedBox(width: 30),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +63,7 @@ class CardItems extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            '$title',
+                            title,
                             style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -77,20 +76,20 @@ class CardItems extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       (progress == 0 || progress == null)
-                          ? Text('Not started',
+                          ? const Text('Not started',
                               style: TextStyle(
                                   fontSize: 15, color: Constants.textPrimary))
                           : Container(
                               height: 6,
-                              decoration: new BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0)),
                                 shape: BoxShape.rectangle,
                                 color: Color(0xFFD9E2EC),
                               ),
-                              child: new LayoutBuilder(builder:
+                              child: LayoutBuilder(builder:
                                   (BuildContext context,
                                       BoxConstraints constraints) {
                                 return Stack(
@@ -98,7 +97,7 @@ class CardItems extends StatelessWidget {
                                     Positioned(
                                       left: 0,
                                       child: Container(
-                                          decoration: new BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10.0)),
                                             shape: BoxShape.rectangle,
