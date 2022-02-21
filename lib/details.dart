@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'dart:async';
 import 'package:health_connect/patient_screen.dart';
 
 class NamePage extends StatefulWidget {
@@ -128,14 +128,24 @@ class NamePageState extends State<NamePage> {
                 });
               },
             ),
-            ElevatedButton(
-              onPressed: () => _selectDate(context),
-              child: const Text(
-                'Pick Date',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text("DOB"),
+              const SizedBox(width: 20),
+              Text(selectedDate.day.toString() +
+                  "/" +
+                  selectedDate.month.toString() +
+                  "/" +
+                  selectedDate.year.toString()),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: () => _selectDate(context),
+                child: const Text(
+                  'Pick Date',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
+            ]),
             TextButton(
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(
