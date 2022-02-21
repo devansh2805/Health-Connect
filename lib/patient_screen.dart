@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
+import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
@@ -178,6 +179,12 @@ class HomeScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Expanded(
+                                    child: InkWell(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SymptomsScreen()),
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -193,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                                       SizedBox(height: 5),
                                     ],
                                   ),
-                                ),
+                                )),
                               ],
                             ),
                           ],
