@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/symptoms.dart';
+import 'package:health_connect/profile_page.dart';
 import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
@@ -54,7 +55,10 @@ class HomeScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print("Tapped");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProfileScreen()));
                       },
                       child: const CircleAvatar(
                         radius: 26.0,
@@ -183,7 +187,8 @@ class HomeScreen extends StatelessWidget {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SymptomsScreen()),
+                                        builder: (context) =>
+                                            const SymptomsScreen()),
                                   ),
                                   child: Column(
                                     crossAxisAlignment:

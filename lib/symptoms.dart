@@ -76,12 +76,10 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
         symptomsList.add(checkBoxListTileModel[i].title);
       }
     }
-    await FirebaseFirestore.instance
-        .collection('userSymptoms')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({
+    await FirebaseFirestore.instance.collection('userSymptoms').add({
       'uid': FirebaseAuth.instance.currentUser!.uid,
       'symptoms': symptomsList,
+      'time': Timestamp.now()
     });
     Navigator.pop(context);
   }
