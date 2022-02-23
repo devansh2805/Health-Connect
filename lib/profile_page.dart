@@ -14,6 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Constants.darkAccent,
+        foregroundColor: Colors.white,
         elevation: 1,
         // leading: IconButton(
         //   icon: Icon(
@@ -34,14 +35,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           child: ListView(
             children: [
-              Text(
+              const Text(
                 "Edit Profile",
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w500,
                     color: Colors.black54),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Center(
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Colors.black.withOpacity(0.1)),
                           ],
                           shape: BoxShape.circle,
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
                                 "https://media-exp1.licdn.com/dms/image/C4D03AQESolQR1NfCGQ/profile-displayphoto-shrink_400_400/0/1626351156404?e=1632355200&v=beta&t=z8hNb_8VZcRVzY8pVEJkgiUNZt2gNeJat-9hiGVWShU",
@@ -80,9 +81,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 4,
                             color: Theme.of(context).scaffoldBackgroundColor,
                           ),
-                          color: Colors.deepPurple,
+                          color: Constants.darkAccent,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           color: Colors.white,
                         ),
@@ -91,14 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               buildTextField("Full Name", "Tanmay Patel", false),
               buildTextField("E-mail", "tp@gmail.com", false),
               buildTextField("Password", "*********", true),
               buildTextField("Location", "Visnagar, India", false),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               Row(
@@ -109,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     onPressed: () {},
-                    child: Text("CANCLE",
+                    child: const Text("CANCEL",
                         style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 2.2,
@@ -117,12 +118,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   RaisedButton(
                       onPressed: () {},
-                      color: Colors.deepPurple,
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      color: Constants.darkAccent,
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       elevation: 2,
-                      child: Text("SAVE",
+                      child: const Text("SAVE",
                           style: TextStyle(
                               fontSize: 14,
                               letterSpacing: 2.2,
@@ -150,16 +151,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // showPassword = !showPassword;
                       });
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.remove_red_eye,
                       color: Colors.grey,
                     ))
                 : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
+            contentPadding: const EdgeInsets.only(bottom: 3),
             labelText: labelText,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black26,

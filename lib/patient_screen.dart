@@ -14,6 +14,70 @@ class HomeScreen extends StatelessWidget {
     double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      appBar: AppBar(
+          // leading: GestureDetector(
+          //   onTap: () {},
+          //   child: const Icon(
+          //     Icons.menu,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          backgroundColor: Constants.darkAccent,
+          foregroundColor: Colors.white),
+      drawer: Drawer(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          children: [
+            const DrawerHeader(
+                padding: EdgeInsets.only(bottom: 40),
+                child: Image(
+                  image: AssetImage('assets/icons/logo.png'),
+                  fit: BoxFit.contain,
+                )
+                //     Text(
+                //   "Health Connect",
+                //   style: TextStyle(
+                //       fontSize: 30,
+                //       fontWeight: FontWeight.w700,
+                //       color: Color(0xff88a9ff)),
+                // )
+                ),
+            const SizedBox(
+              height: 40,
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text('Profile',
+                  style: TextStyle(
+                    color: Constants.darkAccent,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w200,
+                  )),
+              onTap: () {},
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text('History',
+                  style: TextStyle(
+                    color: Constants.darkAccent,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w200,
+                  )),
+              onTap: () {},
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text('Check Severity',
+                  style: TextStyle(
+                    color: Constants.darkAccent,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w200,
+                  )),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
       backgroundColor: Constants.backgroundColor,
       body: Stack(
         children: <Widget>[
