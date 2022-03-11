@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_connect/cardiac_arrest.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/profile_page.dart';
@@ -65,7 +66,13 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.w200,
                   )),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CardiacScreen()),
+                );
+              },
             ),
           ],
         ),
