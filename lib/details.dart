@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 import 'package:health_connect/patient_screen.dart';
+import 'dart:async';
+import 'package:health_connect/doctor.dart';
 
 class NamePage extends StatefulWidget {
   const NamePage({Key? key}) : super(key: key);
@@ -195,7 +197,11 @@ class NamePageState extends State<NamePage> {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return const HomeScreen();
+                          if (_userType == "Patient") {
+                            return const HomeScreen();
+                          } else {
+                            return const DoctorScreen();
+                          }
                         },
                       ),
                     );

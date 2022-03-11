@@ -6,8 +6,8 @@ import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class DoctorScreen extends StatelessWidget {
+  const DoctorScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +25,7 @@ class HomeScreen extends StatelessWidget {
                 child: Image(
                   image: AssetImage('assets/icons/logo.png'),
                   fit: BoxFit.contain,
-                )
-                //     Text(
-                //   "Health Connect",
-                //   style: TextStyle(
-                //       fontSize: 30,
-                //       fontWeight: FontWeight.w700,
-                //       color: Color(0xff88a9ff)),
-                // )
-                ),
+                )),
             const SizedBox(
               height: 40,
             ),
@@ -102,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                   children: <Widget>[
                     const Expanded(
                       child: Text(
-                        "Hi,\nPatient",
+                        "Hi,\nDoctor",
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.w900,
@@ -128,64 +120,8 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 80),
 
                 // Main Cards - Heartbeat and Blood Pressure
-                SizedBox(
-                  height: 200,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: const <Widget>[
-                      CardMain(
-                        image: AssetImage('assets/icons/heartbeat.png'),
-                        title: "Hearbeat",
-                        value: "66",
-                        unit: "bpm",
-                        color: Constants.lightGreen,
-                      ),
-                      CardMain(
-                          image: AssetImage('assets/icons/blooddrop.png'),
-                          title: "Blood Pressure",
-                          value: "66/123",
-                          unit: "mmHg",
-                          color: Constants.lightYellow),
-                      CardMain(
-                          image: AssetImage('assets/icons/blooddrop.png'),
-                          title: "Blood Pressure",
-                          value: "66/123",
-                          unit: "mmHg",
-                          color: Constants.lightBlue)
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 50),
-
                 const Text(
-                  "YOUR DOCTORS",
-                  style: TextStyle(
-                    color: Constants.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-                SizedBox(
-                    height: 150,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const <Widget>[
-                        CardSection(
-                            title: "Dr. ABC",
-                            picture:
-                                AssetImage('assets/icons/profile_picture.png')),
-                        CardSection(
-                            title: "Dr. Devansh",
-                            picture:
-                                AssetImage('assets/icons/profile_picture.png'))
-                      ],
-                    )),
-                const SizedBox(height: 50),
-                const Text(
-                  "YOUR SYMPTOMS",
+                  "YOUR PATIENTS",
                   style: TextStyle(
                       color: Constants.textPrimary,
                       fontSize: 13,
@@ -251,7 +187,7 @@ class HomeScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: const <Widget>[
                                       Text(
-                                        "Symptoms",
+                                        "Patients",
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             fontSize: 20,
