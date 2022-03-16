@@ -67,6 +67,7 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w200,
                   )),
               onTap: () {
+                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
