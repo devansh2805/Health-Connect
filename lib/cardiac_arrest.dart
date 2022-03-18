@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
+import 'model.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,6 +13,12 @@ class CardiacScreen extends StatefulWidget {
 class _CardiacScreenState extends State<CardiacScreen> {
   bool value1 = false;
   bool value2 = false;
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController cholesterolController = TextEditingController();
+  final TextEditingController glucoseController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,70 +41,75 @@ class _CardiacScreenState extends State<CardiacScreen> {
         children: [
           Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.all(15),
                 child: TextField(
-                  style: TextStyle(
+                  controller: ageController,
+                  style: const TextStyle(
                     color: Constants.darkYellow,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Age',
                     hintText: 'Enter Your Age',
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.all(15),
                 child: TextField(
-                  style: TextStyle(
+                  controller: heightController,
+                  style: const TextStyle(
                     color: Constants.darkYellow,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Height',
                     hintText: 'Enter Height',
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.all(15),
                 child: TextField(
-                  style: TextStyle(
+                  controller: weightController,
+                  style: const TextStyle(
                     color: Constants.darkYellow,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Weight',
                     hintText: 'Enter Weight',
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.all(15),
                 child: TextField(
-                  style: TextStyle(
+                  controller: cholesterolController,
+                  style: const TextStyle(
                     color: Constants.darkYellow,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Cholestrol',
-                    hintText: 'Enter Cholestrol',
+                    labelText: 'Cholesterol',
+                    hintText: 'Enter Cholesterol',
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.all(15),
                 child: TextField(
-                  style: TextStyle(
+                  controller: glucoseController,
+                  style: const TextStyle(
                     color: Constants.darkYellow,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Glucose',
                     hintText: 'Enter Glucose',
@@ -118,10 +130,10 @@ class _CardiacScreenState extends State<CardiacScreen> {
                   child: Checkbox(
                     activeColor: Constants.lightYellow,
                     checkColor: Constants.darkYellow,
-                    value: this.value1,
+                    value: value1,
                     onChanged: (bool? value) {
                       setState(() {
-                        this.value1 = value!;
+                        value1 = value!;
                       });
                     },
                   ),
@@ -144,10 +156,10 @@ class _CardiacScreenState extends State<CardiacScreen> {
                   child: Checkbox(
                     activeColor: Constants.lightYellow,
                     checkColor: Constants.darkYellow,
-                    value: this.value2,
+                    value: value2,
                     onChanged: (bool? value) {
                       setState(() {
-                        this.value2 = value!;
+                        value2 = value!;
                       });
                     },
                   ),
@@ -158,18 +170,22 @@ class _CardiacScreenState extends State<CardiacScreen> {
               ]),
               const SizedBox(height: 30),
               ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Continue",
-                      style: TextStyle(
-                          fontSize: 25.0, fontWeight: FontWeight.w300)),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                        const EdgeInsets.fromLTRB(15, 8, 15, 8)),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Constants.lightYellow),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Constants.darkYellow),
-                  ))
+                onPressed: () {
+                  //CardiacModel cardiacModel = CardiacModel();
+                  //cardiacModel.classify();
+                },
+                child: const Text("Continue",
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w300)),
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                      const EdgeInsets.fromLTRB(15, 8, 15, 8)),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Constants.lightYellow),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Constants.darkYellow),
+                ),
+              )
             ],
           )
         ],
