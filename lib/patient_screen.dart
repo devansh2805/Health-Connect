@@ -2,13 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:health_connect/cardiac_arrest.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/symptoms.dart';
+import 'package:health_connect/history.dart';
 import 'package:health_connect/profile_page.dart';
 import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
+import 'dart:ui';
+import 'package:health_connect/heartrate.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:health_connect/oxygenreading.dart';
+import 'package:health_connect/communication.dart';
+import 'package:health_connect/parameterreader.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
+    Key? key,
+    required this.camera,
+  }) : super(key: key);
+
+  final CameraDescription camera;
+
+  @override
+  State<StatefulWidget> createState() => HomeScreenState();
+}
+
+class HomeScreenState extends State<HomeScreen> {
+  Communication communication = Communication();
+  String result = "";
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +47,7 @@ class HomeScreen extends StatelessWidget {
                 child: Image(
                   image: AssetImage('assets/icons/logo.png'),
                   fit: BoxFit.contain,
-                )
-                //     Text(
-                //   "Health Connect",
-                //   style: TextStyle(
-                //       fontSize: 30,
-                //       fontWeight: FontWeight.w700,
-                //       color: Color(0xff88a9ff)),
-                // )
-                ),
+                )),
             const SizedBox(
               height: 40,
             ),
@@ -46,7 +59,12 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.w200,
                   )),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileScreen()));
+              },
             ),
             ListTile(
               minVerticalPadding: 20,
@@ -56,7 +74,14 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.w200,
                   )),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HistoryScreen()),
+                );
+              },
             ),
             ListTile(
               minVerticalPadding: 20,
@@ -99,13 +124,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // BODY
           Padding(
             padding: const EdgeInsets.all(Constants.paddingSide),
             child: ListView(
               children: <Widget>[
-                // Header - Greetings and Avatar
                 Row(
                   children: <Widget>[
                     const Expanded(
@@ -132,40 +154,131 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 80),
-
-                // Main Cards - Heartbeat and Blood Pressure
                 SizedBox(
                   height: 200,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: const <Widget>[
+                    children: <Widget>[
                       CardMain(
                         image: AssetImage('assets/icons/heartbeat.png'),
-                        title: "Hearbeat",
-                        value: "66",
-                        unit: "bpm",
+                        title: "Oxygen",
+                        value: result,
+                        unit: "%",
                         color: Constants.lightGreen,
+                        func: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 10.0,
+                                  sigmaY: 10.0,
+                                ),
+                                child: Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      20,
+                                    ),
+                                  ),
+                                  elevation: 5,
+                                  backgroundColor: Colors.indigo[50],
+                                  child: Center(
+                                    child: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.30,
+                                      width: MediaQuery.of(context).size.width -
+                                          10,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            const Text(
+                                              'Do you have Health Connect Device?',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                        return ParameterReader(
+                                                          communication:
+                                                              communication,
+                                                          bluetoothMessage:
+                                                              "Oxygen",
+                                                          title:
+                                                              "Oxygen Reading",
+                                                          sensorWaitingTime: 75,
+                                                        );
+                                                      }),
+                                                    ).then((value) {
+                                                      setState(() {
+                                                        result = value;
+                                                      });
+                                                    });
+                                                  },
+                                                  child: const Text('Yes'),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OxygenReading(
+                                                          camera: widget.camera,
+                                                        ),
+                                                      ),
+                                                    ).then((value) {
+                                                      setState(() {
+                                                        result = value;
+                                                      });
+                                                    });
+                                                  },
+                                                  child: const Text("No"),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                      CardMain(
-                          image: AssetImage('assets/icons/blooddrop.png'),
-                          title: "Blood Pressure",
-                          value: "66/123",
-                          unit: "mmHg",
-                          color: Constants.lightYellow),
-                      CardMain(
-                          image: AssetImage('assets/icons/blooddrop.png'),
-                          title: "Blood Pressure",
-                          value: "66/123",
-                          unit: "mmHg",
-                          color: Constants.lightBlue)
+                      // CardMain(
+                      //     image: AssetImage('assets/icons/blooddrop.png'),
+                      //     title: "Blood Pressure",
+                      //     value: "66/123",
+                      //     unit: "mmHg",
+                      //     color: Constants.lightYellow, func:),
+                      // CardMain(
+                      //     image: AssetImage('assets/icons/blooddrop.png'),
+                      //     title: "Blood Pressure",
+                      //     value: "66/123",
+                      //     unit: "mmHg",
+                      //     color: Constants.lightBlue, func:)
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 50),
-
                 const Text(
                   "YOUR DOCTORS",
                   style: TextStyle(
@@ -174,7 +287,6 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 20),
                 SizedBox(
                     height: 150,

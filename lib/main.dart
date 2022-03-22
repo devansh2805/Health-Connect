@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,15 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_connect/doctor.dart';
 import 'package:health_connect/login.dart';
 import 'package:health_connect/patient_screen.dart';
+import 'package:camera/camera.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+  runApp(MyApp(camera: firstCamera));
 }
 
 // ignore: must_be_immutable
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  CameraDescription camera;
   Future<DocumentSnapshot> user = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
     return value.data()!['userType'];
   });
 
-  MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key, required this.camera}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     print(user);
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
             ? const LoginPage()
             : (user.toString() == "Doctor"
                 ? const DoctorScreen()
-                : const HomeScreen()));
+                : const HomeScreen(camera: camera)));
   }
 }
 

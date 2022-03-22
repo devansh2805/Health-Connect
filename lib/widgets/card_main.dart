@@ -9,14 +9,16 @@ class CardMain extends StatelessWidget {
   final String value;
   final String unit;
   final Color color;
+  void Function() func;
 
-  const CardMain(
+  CardMain(
       {Key? key,
       required this.image,
       required this.title,
       required this.value,
       required this.unit,
-      required this.color})
+      required this.color,
+      required this.func})
       : super(key: key);
 
   @override
@@ -91,7 +93,9 @@ class CardMain extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            func();
+                          },
                           child: const Text("Read"),
                           style: ElevatedButton.styleFrom(
                             primary: Constants.lightAccent,
@@ -102,13 +106,7 @@ class CardMain extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () {
-              // debugPrint("CARD main clicked. redirect to details page");
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => DetailScreen()),
-              // );
-            },
+            onTap: () {},
           ),
           color: Colors.transparent,
         ),

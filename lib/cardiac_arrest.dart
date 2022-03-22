@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
-import 'model.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health_connect/model.dart';
 
 class CardiacScreen extends StatefulWidget {
   const CardiacScreen({Key? key}) : super(key: key);
@@ -190,14 +188,6 @@ class _CardiacScreenState extends State<CardiacScreen> {
           )
         ],
       )),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     saveFunction();
-      //   },
-      //   child: const Icon(Icons.arrow_right_alt, size: 40.0),
-      //   backgroundColor: Constants.darkAccent,
-      //   foregroundColor: Colors.white,
-      // )
     );
   }
 }
