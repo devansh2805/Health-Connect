@@ -18,63 +18,67 @@ void main() async {
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   CameraDescription camera;
-  Future<DocumentSnapshot> user = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .get()
-      .then((value) {
-    return value.data()!['userType'];
-  });
+
+  Future<DocumentSnapshot> getUserType() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+  }
 
   MyApp({Key? key, required this.camera}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(user);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Health Connect',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
-      home: FirebaseAuth.instance.currentUser == null
-          ? LoginPage(camera: camera)
-          : (user.toString() == "Doctor"
-              ? const DoctorScreen()
-              : HomeScreen(
-                  camera: camera,
-                )),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Health Connect',
+        theme: ThemeData(
+          primarySwatch: Colors.amber,
+        ),
+        home: FirebaseAuth.instance.currentUser == null
+            ? LoginPage(camera: camera)
+            : MyHomePage(camera: camera));
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
+  final CameraDescription camera;
+  const MyHomePage({Key? key, required this.camera}) : super(key: key);
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<int> getUserDetails() async {
+    int userType = 1;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      userType = value.data()!['userType'];
+    });
+    return userType;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Hi',
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-      ),
+    return FutureBuilder(
+      future: getUserDetails(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == 1) {
+            return const DoctorScreen();
+          } else {
+            return HomeScreen(camera: widget.camera);
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

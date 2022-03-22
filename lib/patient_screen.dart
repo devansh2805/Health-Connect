@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:health_connect/authentication.dart';
 import 'package:health_connect/cardiac_arrest.dart';
 import 'package:health_connect/const.dart';
+import 'package:health_connect/login.dart';
+import 'package:health_connect/main.dart';
 import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/history.dart';
 import 'package:health_connect/profile_page.dart';
@@ -110,6 +113,25 @@ class HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text(
+                'Log Out',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              onTap: () {
+                Auth.signOut();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                    PageRouteBuilder(pageBuilder: (context, _, __) {
+                  return LoginPage(camera: widget.camera);
+                }), (route) => false);
+              },
+            )
           ],
         ),
       ),

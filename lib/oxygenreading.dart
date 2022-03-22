@@ -139,9 +139,9 @@ class OxygenReadingState extends State<OxygenReading> {
           onPressed: () async {
             ImageCache().clear();
             if (await Directory(
-                    '/data/user/0/com.example.cam_reading/app_ExportImage')
+                    '/data/user/0/com.example.health_connect/app_ExportImage')
                 .exists()) {
-              Directory('/data/user/0/com.example.cam_reading/app_ExportImage')
+              Directory('/data/user/0/com.example.health_connect/app_ExportImage')
                   .deleteSync(recursive: true);
             }
             try {

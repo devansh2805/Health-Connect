@@ -13,21 +13,32 @@ class CardiacModel {
     var x = _interpreter.getInputTensor(0);
     print(x.data);
     //print(_interpreter.getOutputTensors().shape);
-    classifyPatient(50, 168, 62, 2196, 120, 80, '1', '2', '3', '0', '1');
+    classifyPatient(
+        50.toDouble(),
+        168.toDouble(),
+        62.toDouble(),
+        2196.toDouble(),
+        120.toDouble(),
+        80.toDouble(),
+        double.parse('1'),
+        double.parse('2'),
+        double.parse('3'),
+        double.parse('0'),
+        double.parse('1'));
   }
 
   classifyPatient(
-      int age,
-      int height,
-      int weight,
-      int bmi,
-      int sys,
-      int dia,
-      String gender,
-      String glucose,
-      String cholesterol,
-      String smoker,
-      String alcoholic) async {
+      double age,
+      double height,
+      double weight,
+      double bmi,
+      double sys,
+      double dia,
+      double gender,
+      double glucose,
+      double cholesterol,
+      double smoker,
+      double alcoholic) async {
     //await _loadModel();
 
     var input = [

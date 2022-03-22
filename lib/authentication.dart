@@ -160,7 +160,7 @@ class Auth {
     );
   }
 
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
     return FirebaseAuth.instance.signOut();
   }
 }
