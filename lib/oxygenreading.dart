@@ -169,7 +169,7 @@ class OxygenReadingState extends State<OxygenReading> {
                                   });
                                   Navigator.pop(
                                     context,
-                                    _spo2.round().toString() + " %",
+                                    _spo2.round().toString(),
                                   );
                                 });
                               });

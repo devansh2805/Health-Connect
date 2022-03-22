@@ -16,7 +16,7 @@ void main() async {
 }
 
 // ignore: must_be_immutable
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   CameraDescription camera;
   Future<DocumentSnapshot> user = FirebaseFirestore.instance
       .collection('users')
@@ -27,20 +27,24 @@ class MyApp extends StatefulWidget {
   });
 
   MyApp({Key? key, required this.camera}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     print(user);
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Health Connect',
-        theme: ThemeData(
-          primarySwatch: Colors.amber,
-        ),
-        home: FirebaseAuth.instance.currentUser == null
-            ? const LoginPage()
-            : (user.toString() == "Doctor"
-                ? const DoctorScreen()
-                : const HomeScreen(camera: camera)));
+      debugShowCheckedModeBanner: false,
+      title: 'Health Connect',
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+      ),
+      home: FirebaseAuth.instance.currentUser == null
+          ? LoginPage(camera: camera)
+          : (user.toString() == "Doctor"
+              ? const DoctorScreen()
+              : HomeScreen(
+                  camera: camera,
+                )),
+    );
   }
 }
 

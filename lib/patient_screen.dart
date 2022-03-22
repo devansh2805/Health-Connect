@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:health_connect/cardiac_arrest.dart';
 import 'package:health_connect/const.dart';
@@ -7,7 +8,6 @@ import 'package:health_connect/profile_page.dart';
 import 'package:health_connect/widgets/card_main.dart';
 import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
-import 'dart:ui';
 import 'package:health_connect/heartrate.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -53,50 +53,60 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               minVerticalPadding: 20,
-              title: const Text('Profile',
-                  style: TextStyle(
-                    color: Constants.darkAccent,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  )),
+              title: const Text(
+                'Profile',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen()));
-              },
-            ),
-            ListTile(
-              minVerticalPadding: 20,
-              title: const Text('History',
-                  style: TextStyle(
-                    color: Constants.darkAccent,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  )),
-              onTap: () {
-                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const HistoryScreen()),
+                    builder: (context) => const ProfileScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               minVerticalPadding: 20,
-              title: const Text('Check Severity',
-                  style: TextStyle(
-                    color: Constants.darkAccent,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  )),
+              title: const Text(
+                'History',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CardiacScreen()),
+                    builder: (context) => const HistoryScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text(
+                'Check Severity',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CardiacScreen(),
+                  ),
                 );
               },
             ),
@@ -142,9 +152,11 @@ class HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ProfileScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileScreen(),
+                          ),
+                        );
                       },
                       child: const CircleAvatar(
                         radius: 26.0,
@@ -161,7 +173,7 @@ class HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
                       CardMain(
-                        image: AssetImage('assets/icons/heartbeat.png'),
+                        image: const AssetImage('assets/icons/heartbeat.png'),
                         title: "Oxygen",
                         value: result,
                         unit: "%",
@@ -183,77 +195,75 @@ class HomeScreenState extends State<HomeScreen> {
                                   ),
                                   elevation: 5,
                                   backgroundColor: Colors.indigo[50],
-                                  child: Center(
-                                    child: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.30,
-                                      width: MediaQuery.of(context).size.width -
-                                          10,
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            const Text(
-                                              'Do you have Health Connect Device?',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.30,
+                                    width:
+                                        MediaQuery.of(context).size.width - 10,
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            'Do you have Health Connect Device?',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                      return ParameterReader(
+                                                        communication:
+                                                            communication,
+                                                        bluetoothMessage:
+                                                            "Oxygen",
+                                                        title: "Oxygen Reading",
+                                                        sensorWaitingTime: 75,
+                                                      );
+                                                    }),
+                                                  ).then((value) {
+                                                    setState(() {
+                                                      result = value;
+                                                    });
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: const Text('Yes'),
                                               ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                        return ParameterReader(
-                                                          communication:
-                                                              communication,
-                                                          bluetoothMessage:
-                                                              "Oxygen",
-                                                          title:
-                                                              "Oxygen Reading",
-                                                          sensorWaitingTime: 75,
-                                                        );
-                                                      }),
-                                                    ).then((value) {
-                                                      setState(() {
-                                                        result = value;
-                                                      });
-                                                    });
-                                                  },
-                                                  child: const Text('Yes'),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OxygenReading(
-                                                          camera: widget.camera,
-                                                        ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          OxygenReading(
+                                                        camera: widget.camera,
                                                       ),
-                                                    ).then((value) {
-                                                      setState(() {
-                                                        result = value;
-                                                      });
+                                                    ),
+                                                  ).then((value) {
+                                                    setState(() {
+                                                      result = value;
                                                     });
-                                                  },
-                                                  child: const Text("No"),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: const Text("No"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -289,20 +299,21 @@ class HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                    height: 150,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const <Widget>[
-                        CardSection(
-                            title: "Dr. ABC",
-                            picture:
-                                AssetImage('assets/icons/profile_picture.png')),
-                        CardSection(
-                            title: "Dr. Devansh",
-                            picture:
-                                AssetImage('assets/icons/profile_picture.png'))
-                      ],
-                    )),
+                  height: 150,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: const <Widget>[
+                      CardSection(
+                          title: "Dr. ABC",
+                          picture:
+                              AssetImage('assets/icons/profile_picture.png')),
+                      CardSection(
+                          title: "Dr. Devansh",
+                          picture:
+                              AssetImage('assets/icons/profile_picture.png'))
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 50),
                 const Text(
                   "YOUR SYMPTOMS",
@@ -363,8 +374,9 @@ class HomeScreenState extends State<HomeScreen> {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SymptomsScreen()),
+                                      builder: (context) =>
+                                          const SymptomsScreen(),
+                                    ),
                                   ),
                                   child: Column(
                                     crossAxisAlignment:

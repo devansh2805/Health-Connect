@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'authentication.dart';
+import 'package:camera/camera.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key, required this.camera}) : super(key: key);
+
+  final CameraDescription camera;
 
   @override
   State<StatefulWidget> createState() {
@@ -53,7 +56,8 @@ class LoginPageState extends State<LoginPage> {
               onPressed: () async {
                 final phoneNumber = countryCode + _phoneController.text.trim();
                 setState(() => clicked = true);
-                await Auth().loginUser(phoneNumber, context);
+                await Auth(camera: widget.camera)
+                    .loginUser(phoneNumber, context);
               },
               child: Text(
                 'Login',

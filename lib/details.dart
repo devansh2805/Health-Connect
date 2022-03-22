@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:async';
 import 'package:health_connect/patient_screen.dart';
-import 'dart:async';
 import 'package:health_connect/doctor.dart';
+import 'package:camera/camera.dart';
 
 class NamePage extends StatefulWidget {
-  const NamePage({Key? key}) : super(key: key);
+  const NamePage({Key? key, required this.camera}) : super(key: key);
+  final CameraDescription camera;
 
   @override
   State<StatefulWidget> createState() {
@@ -197,8 +197,10 @@ class NamePageState extends State<NamePage> {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          if (_userType == "Patient") {
-                            return const HomeScreen();
+                          if (_userType == 1) {
+                            return HomeScreen(
+                              camera: widget.camera,
+                            );
                           } else {
                             return const DoctorScreen();
                           }

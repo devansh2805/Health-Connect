@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_connect/patient_screen.dart';
+import 'package:camera/camera.dart';
 
 class Auth {
+  final CameraDescription camera;
+
+  Auth({required this.camera});
+
   Future<void> loginUser(String phoneNumber, BuildContext context) async {
     final TextEditingController _codeController = TextEditingController();
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -91,7 +96,9 @@ class Auth {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const HomeScreen();
+                              return HomeScreen(
+                                camera: camera,
+                              );
                             },
                           ),
                         );
@@ -100,7 +107,7 @@ class Auth {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const NamePage();
+                              return NamePage(camera: camera);
                             },
                           ),
                         );
