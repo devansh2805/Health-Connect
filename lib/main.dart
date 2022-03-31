@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == 1) {
-            return const DoctorScreen();
+            return DoctorScreen(camera: widget.camera);
           } else {
             return HomeScreen(camera: widget.camera);
           }

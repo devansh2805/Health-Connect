@@ -169,8 +169,8 @@ class _CardiacScreenState extends State<CardiacScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  //CardiacModel cardiacModel = CardiacModel();
-                  //cardiacModel.classify();
+                  CardiacModel cardiacModel = CardiacModel();
+                  cardiacModel.classify();
                 },
                 child: const Text("Continue",
                     style:

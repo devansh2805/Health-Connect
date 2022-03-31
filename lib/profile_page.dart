@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               CircleAvatar(
                 backgroundImage: profilePicUrl == ""
-                    ? const AssetImage("assets/icons/profile_picture.png")
+                    ? const AssetImage("assets/icons/default_picture.png")
                         as ImageProvider
                     : NetworkImage(profilePicUrl),
                 radius: width * 0.2,

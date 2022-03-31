@@ -202,7 +202,9 @@ class NamePageState extends State<NamePage> {
                               camera: widget.camera,
                             );
                           } else {
-                            return const DoctorScreen();
+                            return DoctorScreen(
+                              camera: widget.camera,
+                            );
                           }
                         },
                       ),

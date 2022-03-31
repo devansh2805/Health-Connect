@@ -17,6 +17,9 @@ import 'package:camera/camera.dart';
 import 'package:health_connect/oxygenreading.dart';
 import 'package:health_connect/communication.dart';
 import 'package:health_connect/parameterreader.dart';
+import 'package:health_connect/add_doctor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -32,7 +35,44 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   Communication communication = Communication();
+  final firestoreInstance = FirebaseFirestore.instance;
+  List<dynamic> _list = [];
   String result = "";
+  String result2 = "";
+  String result3 = "";
+  String result4 = "";
+
+  void initState() {
+    super.initState();
+    firestoreInstance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        _list = value.data()!['doctors'];
+      });
+    });
+    firestoreInstance
+        .collection("readings")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("Oxygen")
+        .get()
+        .then((value) {
+      Timestamp max = value.docs.first.data()["timestamp"];
+      String oxyvalue = value.docs.first.data()["value"];
+      value.docs.forEach((element) {
+        if (max.compareTo(element.data()["timestamp"]).isNegative) {
+          max = element.data()["timestamp"];
+          oxyvalue = element.data()["value"];
+        }
+      });
+      setState(() {
+        print(oxyvalue);
+        result = oxyvalue;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +149,26 @@ class HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const CardiacScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text(
+                'Add Doctors',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddDoctorScreen(),
                   ),
                 );
               },
@@ -195,7 +255,7 @@ class HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
                       CardMain(
-                        image: const AssetImage('assets/icons/heartbeat.png'),
+                        image: const AssetImage('assets/icons/oxygen.png'),
                         title: "Oxygen",
                         value: result,
                         unit: "%",
@@ -239,6 +299,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             children: [
                                               TextButton(
                                                 onPressed: () {
+                                                  Navigator.pop(context);
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -256,7 +317,6 @@ class HomeScreenState extends State<HomeScreen> {
                                                     setState(() {
                                                       result = value;
                                                     });
-                                                    Navigator.pop(context);
                                                   });
                                                 },
                                                 child: const Text('Yes'),
@@ -266,6 +326,7 @@ class HomeScreenState extends State<HomeScreen> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
+                                                  Navigator.pop(context);
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -277,8 +338,20 @@ class HomeScreenState extends State<HomeScreen> {
                                                   ).then((value) {
                                                     setState(() {
                                                       result = value;
+                                                      firestoreInstance
+                                                          .collection(
+                                                              "readings")
+                                                          .doc(FirebaseAuth
+                                                              .instance
+                                                              .currentUser
+                                                              ?.uid)
+                                                          .collection("Oxygen")
+                                                          .add({
+                                                        "timestamp":
+                                                            Timestamp.now(),
+                                                        "value": value
+                                                      });
                                                     });
-                                                    Navigator.pop(context);
                                                   });
                                                 },
                                                 child: const Text("No"),
@@ -295,18 +368,155 @@ class HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                      // CardMain(
-                      //     image: AssetImage('assets/icons/blooddrop.png'),
-                      //     title: "Blood Pressure",
-                      //     value: "66/123",
-                      //     unit: "mmHg",
-                      //     color: Constants.lightYellow, func:),
-                      // CardMain(
-                      //     image: AssetImage('assets/icons/blooddrop.png'),
-                      //     title: "Blood Pressure",
-                      //     value: "66/123",
-                      //     unit: "mmHg",
-                      //     color: Constants.lightBlue, func:)
+                      CardMain(
+                        image: const AssetImage('assets/icons/heartbeat.png'),
+                        title: "Heart Rate",
+                        value: result2,
+                        unit: "bpm",
+                        color: Constants.lightYellow,
+                        func: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 10.0,
+                                  sigmaY: 10.0,
+                                ),
+                                child: Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      20,
+                                    ),
+                                  ),
+                                  elevation: 5,
+                                  backgroundColor: Colors.indigo[50],
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.30,
+                                    width:
+                                        MediaQuery.of(context).size.width - 10,
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            'Do you have Health Connect Device?',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                      return ParameterReader(
+                                                        communication:
+                                                            communication,
+                                                        bluetoothMessage:
+                                                            "Heart Rate",
+                                                        title:
+                                                            "Heart Rate Reading",
+                                                        sensorWaitingTime: 75,
+                                                      );
+                                                    }),
+                                                  ).then((value) {
+                                                    setState(() {
+                                                      result2 = value;
+                                                    });
+                                                  });
+                                                },
+                                                child: const Text('Yes'),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HeartRateCalculator(
+                                                        camera: widget.camera,
+                                                      ),
+                                                    ),
+                                                  ).then((value) {
+                                                    setState(() {
+                                                      result2 = value;
+                                                    });
+                                                  });
+                                                },
+                                                child: const Text("No"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      CardMain(
+                          image: const AssetImage('assets/icons/blooddrop.png'),
+                          title: "Blood\nPressure",
+                          value: result3,
+                          unit: "mmHg",
+                          color: Constants.lightPurple,
+                          func: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return ParameterReader(
+                                  communication: communication,
+                                  bluetoothMessage: "Blood Pressure",
+                                  title: "Blood Pressure Reading",
+                                  sensorWaitingTime: 45,
+                                );
+                              }),
+                            ).then((value) {
+                              setState(() {
+                                result = value;
+                              });
+                            });
+                          }),
+                      CardMain(
+                          image:
+                              const AssetImage('assets/icons/temperature.png'),
+                          title: "Body\nTemperature",
+                          value: result4,
+                          unit: "°F",
+                          color: Constants.lightBlue,
+                          func: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return ParameterReader(
+                                  communication: communication,
+                                  bluetoothMessage: "Temperature",
+                                  title: "Temperature Reading",
+                                  sensorWaitingTime: 135,
+                                );
+                              }),
+                            ).then((value) {
+                              setState(() {
+                                result = value;
+                              });
+                            });
+                          }),
                     ],
                   ),
                 ),
@@ -321,21 +531,18 @@ class HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: const <Widget>[
-                      CardSection(
-                          title: "Dr. ABC",
-                          picture:
-                              AssetImage('assets/icons/profile_picture.png')),
-                      CardSection(
-                          title: "Dr. Devansh",
-                          picture:
-                              AssetImage('assets/icons/profile_picture.png'))
-                    ],
-                  ),
-                ),
+                    height: 150,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: _list.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String listData = _list[index];
+                          return CardSection(
+                              title: listData,
+                              picture: const AssetImage(
+                                  'assets/icons/profile_picture.png'));
+                        })),
                 const SizedBox(height: 50),
                 const Text(
                   "YOUR SYMPTOMS",

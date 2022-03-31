@@ -12,6 +12,7 @@ class Constants {
 
   static const Color darkPrimary = Colors.black;
   static const Color darkAccent = Color(0xFF3B72FF);
+  static const Color lightPurple = Color(0xffe0bbe4);
   static const Color darkBackground = Colors.black;
 
   static const Color grey = Color(0xff707070);

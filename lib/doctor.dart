@@ -1,18 +1,28 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/profile_page.dart';
-import 'package:health_connect/widgets/card_main.dart';
-import 'package:health_connect/widgets/card_section.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
+import 'package:health_connect/authentication.dart';
+import 'package:health_connect/login.dart';
 
-class DoctorScreen extends StatelessWidget {
-  const DoctorScreen({Key? key}) : super(key: key);
+class DoctorScreen extends StatefulWidget {
+  const DoctorScreen({
+    Key? key,
+    required this.camera,
+  }) : super(key: key);
 
+  final CameraDescription camera;
+
+  @override
+  State<StatefulWidget> createState() => DoctorScreenState();
+}
+
+class DoctorScreenState extends State<DoctorScreen> {
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Constants.darkAccent, foregroundColor: Colors.white),
@@ -41,24 +51,23 @@ class DoctorScreen extends StatelessWidget {
             ),
             ListTile(
               minVerticalPadding: 20,
-              title: const Text('History',
-                  style: TextStyle(
-                    color: Constants.darkAccent,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  )),
-              onTap: () {},
-            ),
-            ListTile(
-              minVerticalPadding: 20,
-              title: const Text('Check Severity',
-                  style: TextStyle(
-                    color: Constants.darkAccent,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  )),
-              onTap: () {},
-            ),
+              title: const Text(
+                'Log Out',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              onTap: () {
+                Auth.signOut();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                    PageRouteBuilder(pageBuilder: (context, _, __) {
+                  return LoginPage(camera: widget.camera);
+                }), (route) => false);
+              },
+            )
           ],
         ),
       ),

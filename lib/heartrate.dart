@@ -129,8 +129,7 @@ class _HeartRateCalculatorState extends State<HeartRateCalculator> {
   }
 
   void onClickSave() {
-    Navigator.of(context, rootNavigator: true)
-        .pop(bpm.round().toString() + " bpm");
+    Navigator.of(context, rootNavigator: true).pop(bpm.round().toString());
   }
 
   void onCalculateBPM() {
