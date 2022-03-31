@@ -11,7 +11,7 @@ class AddDoctorScreen extends StatefulWidget {
 
 class _AddDoctorScreenState extends State<AddDoctorScreen> {
   @override
-  final TextEditingController _searchController = new TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   final firestoreInstance = FirebaseFirestore.instance;
   bool _isSearching = false;
   List<dynamic> _list = [];
@@ -34,6 +34,8 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
       }
     });
   }
+
+  @override
   void initState() {
     super.initState();
     values();
@@ -77,6 +79,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(

@@ -168,9 +168,20 @@ class _CardiacScreenState extends State<CardiacScreen> {
               ]),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  CardiacModel cardiacModel = CardiacModel();
-                  cardiacModel.classify();
+                onPressed: () async {
+                  CardiacModel cardiacModel = CardiacModel(
+                      age: 21,
+                      gender: 1,
+                      height: 168,
+                      weight: 91,
+                      systolic: 180,
+                      diastolic: 140,
+                      alcoholic: 1,
+                      smoker: 1,
+                      cholestrol: 3,
+                      glucose: 2);
+                  Cardiac cardiac = await cardiacModel.getCardiacResponse();
+                  print("Caridac: " + cardiac.cardio);
                 },
                 child: const Text("Continue",
                     style:
