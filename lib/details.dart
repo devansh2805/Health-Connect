@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_connect/patient_screen.dart';
 import 'package:health_connect/doctor.dart';
+import 'package:health_connect/const.dart';
 import 'package:camera/camera.dart';
 
 class NamePage extends StatefulWidget {
@@ -19,8 +20,10 @@ class NamePage extends StatefulWidget {
 
 class NamePageState extends State<NamePage> {
   late TextEditingController _nameController;
-  int _userType = 1;
+  int _userType = 2;
   int _gender = 1;
+  bool value1 = false;
+  bool value2 = false;
   DateTime selectedDate = DateTime(DateTime.now().year);
   @override
   void initState() {
@@ -148,6 +151,60 @@ class NamePageState extends State<NamePage> {
                 ),
               ),
             ]),
+            if (_userType == 2)
+              Row(children: <Widget>[
+                const SizedBox(
+                  width: 15,
+                ),
+                const Text(
+                  'Smoker',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
+                ),
+                const Spacer(),
+                Transform.scale(
+                  scale: 2.0,
+                  child: Checkbox(
+                    activeColor: Constants.lightYellow,
+                    checkColor: Constants.darkYellow,
+                    value: value1,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        value1 = value!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+              ]),
+            if (_userType == 2)
+              Row(children: <Widget>[
+                const SizedBox(
+                  width: 15,
+                ),
+                const Text(
+                  'Alcoholic',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
+                ),
+                const Spacer(),
+                Transform.scale(
+                  scale: 2.0,
+                  child: Checkbox(
+                    activeColor: Constants.lightYellow,
+                    checkColor: Constants.darkYellow,
+                    value: value2,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        value2 = value!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+              ]),
             TextButton(
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(
@@ -192,7 +249,9 @@ class NamePageState extends State<NamePage> {
                           FirebaseAuth.instance.currentUser!.phoneNumber,
                       'userType': _userType,
                       'gender': _gender,
-                      'birthday': selectedDate
+                      'birthday': selectedDate,
+                      'smoker': value1,
+                      'alcoholic': value2
                     });
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(

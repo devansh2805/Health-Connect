@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CardiacScreen extends StatefulWidget {
   const CardiacScreen({Key? key}) : super(key: key);
@@ -9,8 +11,24 @@ class CardiacScreen extends StatefulWidget {
 }
 
 class _CardiacScreenState extends State<CardiacScreen> {
-  bool value1 = false;
-  bool value2 = false;
+  final firestoreInstance = FirebaseFirestore.instance;
+  @override
+  void initState() {
+    getBp();
+    super.initState();
+  }
+
+  void getBp() {
+    firestoreInstance
+        .collection('readings')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('BloodPressure')
+        .get()
+        .then((value) {
+      Timestamp max = value.docs.first.data()["timestamp"];
+    });
+  }
+
   final TextEditingController ageController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
@@ -114,58 +132,6 @@ class _CardiacScreenState extends State<CardiacScreen> {
                   ),
                 ),
               ),
-              Row(children: <Widget>[
-                const SizedBox(
-                  width: 15,
-                ),
-                const Text(
-                  'Smoker',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
-                ),
-                const Spacer(),
-                Transform.scale(
-                  scale: 2.0,
-                  child: Checkbox(
-                    activeColor: Constants.lightYellow,
-                    checkColor: Constants.darkYellow,
-                    value: value1,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value1 = value!;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-              ]),
-              Row(children: <Widget>[
-                const SizedBox(
-                  width: 15,
-                ),
-                const Text(
-                  'Alcoholic',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
-                ),
-                const Spacer(),
-                Transform.scale(
-                  scale: 2.0,
-                  child: Checkbox(
-                    activeColor: Constants.lightYellow,
-                    checkColor: Constants.darkYellow,
-                    value: value2,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value2 = value!;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-              ]),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
