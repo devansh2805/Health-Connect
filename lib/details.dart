@@ -250,8 +250,8 @@ class NamePageState extends State<NamePage> {
                       'userType': _userType,
                       'gender': _gender,
                       'birthday': selectedDate,
-                      'smoker': value1,
-                      'alcoholic': value2
+                      'smoke': value1,
+                      'alcohol': value2
                     });
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(

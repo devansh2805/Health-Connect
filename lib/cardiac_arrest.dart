@@ -5,27 +5,58 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CardiacScreen extends StatefulWidget {
-  const CardiacScreen({Key? key}) : super(key: key);
+  int systolic;
+  int diastolic;
+  CardiacScreen({Key? key, required this.systolic, required this.diastolic})
+      : super(key: key);
+
   @override
-  State<CardiacScreen> createState() => _CardiacScreenState();
+  State<CardiacScreen> createState() =>
+      _CardiacScreenState(systolic, diastolic);
 }
 
 class _CardiacScreenState extends State<CardiacScreen> {
+  int alco = 0;
+  int smok = 0;
+  int gen = 0;
+  static int systolic = 0;
+  static int diastolic = 0;
   final firestoreInstance = FirebaseFirestore.instance;
+
+  _CardiacScreenState(systolic, diastolic) {
+    systolic = systolic;
+    diastolic = diastolic;
+  }
   @override
   void initState() {
     getBp();
     super.initState();
   }
 
-  void getBp() {
-    firestoreInstance
+  void getBp() async {
+    await firestoreInstance
         .collection('readings')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('BloodPressure')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
         .get()
         .then((value) {
-      Timestamp max = value.docs.first.data()["timestamp"];
+      int dia = value.docs.first.data()["diastolic"];
+      int sys = value.docs.first.data()["systolic"];
+      setState(() {
+        diastolic = dia;
+        systolic = sys;
+      });
+    });
+    await firestoreInstance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      alco = value.data()!["alcohol"];
+      smok = value.data()!["smoke"];
+      gen = value.data()!["gender"];
     });
   }
 
@@ -34,6 +65,10 @@ class _CardiacScreenState extends State<CardiacScreen> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController cholesterolController = TextEditingController();
   final TextEditingController glucoseController = TextEditingController();
+  final TextEditingController bpsController =
+      TextEditingController(text: systolic.toString());
+  final TextEditingController bpdController =
+      TextEditingController(text: diastolic.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -132,21 +167,83 @@ class _CardiacScreenState extends State<CardiacScreen> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: bpdController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'BP Diastolic',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: bpsController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'BP Systolic',
+                  ),
+                ),
+              ),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
                   CardiacModel cardiacModel = CardiacModel(
-                      age: 21,
-                      gender: 1,
-                      height: 168,
-                      weight: 91,
-                      systolic: 180,
-                      diastolic: 140,
-                      alcoholic: 1,
-                      smoker: 1,
-                      cholestrol: 3,
-                      glucose: 2);
+                      age: int.parse(ageController.text),
+                      gender: gen,
+                      height: double.parse(heightController.text),
+                      weight: double.parse(weightController.text),
+                      systolic: int.parse(bpsController.text),
+                      diastolic: int.parse(bpdController.text),
+                      alcoholic: alco,
+                      smoker: smok,
+                      cholestrol: int.parse(cholesterolController.text),
+                      glucose: int.parse(glucoseController.text));
                   Cardiac cardiac = await cardiacModel.getCardiacResponse();
+                  if (cardiac.cardio == 0) {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Severity Prediction"),
+                            content: const Text("Your cardiac health is good"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        });
+                  } else {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Severity Prediction"),
+                            content: const Text(
+                                "Your cardiac health is not good. Contact your doctor immediately"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        });
+                  }
                   print("Caridac: " + cardiac.cardio);
                 },
                 child: const Text("Continue",

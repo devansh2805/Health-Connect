@@ -41,6 +41,8 @@ class HomeScreenState extends State<HomeScreen> {
   String result2 = "";
   String result3 = "";
   String result4 = "";
+  int diastolic = 0;
+  int systolic = 0;
 
   void initState() {
     super.initState();
@@ -68,8 +70,50 @@ class HomeScreenState extends State<HomeScreen> {
         }
       });
       setState(() {
-        print(oxyvalue);
         result = oxyvalue;
+      });
+    });
+    firestoreInstance
+        .collection("readings")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("HeartRate")
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((value) {
+      int hrvalue = value.docs.first.data()["value"];
+      setState(() {
+        result2 = hrvalue.toString();
+      });
+    });
+    firestoreInstance
+        .collection("readings")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("Temperature")
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((value) {
+      int tempvalue = value.docs.first.data()["value"];
+      setState(() {
+        result4 = tempvalue.toString();
+      });
+    });
+
+    firestoreInstance
+        .collection('readings')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('BloodPressure')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((value) {
+      int dia = value.docs.first.data()["diastolic"];
+      int sys = value.docs.first.data()["systolic"];
+      setState(() {
+        diastolic = dia;
+        systolic = sys;
+        result3 = sys.toString() + "\\" + dia.toString();
       });
     });
   }
@@ -148,7 +192,8 @@ class HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CardiacScreen(),
+                    builder: (context) =>
+                        CardiacScreen(systolic: systolic, diastolic: diastolic),
                   ),
                 );
               },
