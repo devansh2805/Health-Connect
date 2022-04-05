@@ -210,7 +210,7 @@ class _CardiacScreenState extends State<CardiacScreen> {
                       cholestrol: int.parse(cholesterolController.text),
                       glucose: int.parse(glucoseController.text));
                   Cardiac cardiac = await cardiacModel.getCardiacResponse();
-                  if (cardiac.cardio == 0) {
+                  if (int.parse(cardiac.cardio) == 0) {
                     Navigator.pop(context);
                     showDialog(
                         context: context,
