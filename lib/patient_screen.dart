@@ -5,6 +5,7 @@ import 'package:health_connect/cardiac_arrest.dart';
 import 'package:health_connect/const.dart';
 import 'package:health_connect/login.dart';
 import 'package:health_connect/main.dart';
+import 'package:health_connect/reports.dart';
 import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/history.dart';
 import 'package:health_connect/profile_page.dart';
@@ -173,6 +174,26 @@ class HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const HistoryScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              minVerticalPadding: 20,
+              title: const Text(
+                'Reports',
+                style: TextStyle(
+                  color: Constants.darkAccent,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReportScreen(),
                   ),
                 );
               },

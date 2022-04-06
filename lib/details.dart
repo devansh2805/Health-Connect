@@ -256,7 +256,7 @@ class NamePageState extends State<NamePage> {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          if (_userType == 1) {
+                          if (_userType == 2) {
                             return HomeScreen(
                               camera: widget.camera,
                             );

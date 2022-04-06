@@ -54,6 +54,9 @@ dependencies:
   charts_flutter:
   flutter_bluetooth_serial:
   wakelock:
+  thumbnailer:
+  file_picker:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:
