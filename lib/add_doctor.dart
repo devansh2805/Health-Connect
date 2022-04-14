@@ -18,6 +18,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
   List<dynamic> _list2 = [];
   String _searchText = "";
   List searchresult = [];
+  List userDocList = [];
 
   _AddDoctorScreenState() {
     _searchController.addListener(() {
@@ -79,6 +80,13 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
     }
   }
 
+  void addDoc(List userDocList) {
+    firestoreInstance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({'doctors': userDocList});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,15 +138,26 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                               children: [
                                 Text(listData.toString()),
                                 Spacer(),
-                                Visibility(
-                                    visible: vis,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            vis = !vis;
-                                          });
-                                        },
-                                        child: Text("Add")))
+                                if (vis)
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        _list2.add(listData);
+                                        addDoc(_list2);
+                                        setState(() {
+                                          vis = !vis;
+                                        });
+                                      },
+                                      child: const Text("Add"))
+                                else
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        _list2.remove(listData);
+                                        addDoc(_list2);
+                                        setState(() {
+                                          vis = !vis;
+                                        });
+                                      },
+                                      child: const Text("Remove"))
                               ],
                             ),
                           );
