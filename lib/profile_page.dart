@@ -17,6 +17,18 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String uid = "";
   String profilePicUrl = "";
+  static String name = "";
+  static String phone = "";
+  static String gender = "";
+  static String userType = "";
+  final TextEditingController nameController =
+      TextEditingController(text: name);
+  final TextEditingController phoneController =
+      TextEditingController(text: phone);
+  final TextEditingController genderController =
+      TextEditingController(text: gender);
+  final TextEditingController userTypeController =
+      TextEditingController(text: userType);
 
   fetchData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
@@ -26,7 +38,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .get()
         .then((value) => value.data()!['imageUrl']);
 
-    setState(() {});
+    setState(() {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((value) {
+        name = value.data()!["name"];
+      });
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((value) {
+        phone = value.data()!["phoneNumber"];
+      });
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((value) {
+        if (value.data()!["gender"]) {
+          gender = "Male";
+        } else if (value.data()!["gender"] == 2) {
+          gender = "Female";
+        } else {
+          gender = "Other";
+        }
+      });
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((value) {
+        if (value.data()!["userType"]) {
+          gender = "Doctor";
+        } else {
+          gender = "Patient";
+        }
+      });
+    });
   }
 
   @override
@@ -92,10 +143,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 35,
               ),
-              // buildTextField("Full Name", "Tanmay Patel", false),
-              // buildTextField("E-mail", "tp@gmail.com", false),
-              // buildTextField("Password", "*********", true),
-              // buildTextField("Location", "Visnagar, India", false),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: nameController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: phoneController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Phone Number',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: genderController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Gender',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextFormField(
+                  controller: userTypeController,
+                  style: const TextStyle(
+                    color: Constants.darkYellow,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'User Type',
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 35,
               ),

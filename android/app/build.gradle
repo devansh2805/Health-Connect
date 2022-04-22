@@ -24,7 +24,9 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
+implementation 'com.google.firebase:firebase-messaging:20.0.0'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
 
 android {
     compileSdkVersion 31
@@ -71,7 +73,7 @@ flutter {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:multidex:2.0.1' 
-
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,8 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
   List<CheckBoxListTileModel> checkBoxListTileModel =
       CheckBoxListTileModel.getSymps();
   bool value = false;
+  String alert = "";
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   var symptomsList = [];
   @override
   Widget build(BuildContext context) {
@@ -81,6 +84,12 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
       'symptoms': symptomsList,
       'time': Timestamp.now()
     });
+
+    if (checkBoxListTileModel[0].isCheck &&
+        checkBoxListTileModel[2].isCheck &&
+        checkBoxListTileModel[3].isCheck) {
+      alert = "Please test yourself for Covid";
+    }
     Navigator.pop(context);
   }
 }

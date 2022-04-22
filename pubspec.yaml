@@ -57,6 +57,9 @@ dependencies:
   thumbnailer:
   file_picker:
   url_launcher:
+  firebase_messaging: ^11.2.14
+  overlay_support: ^1.2.1
+  flutter_local_notifications: ^9.4.0
 
 dev_dependencies:
   flutter_test:
