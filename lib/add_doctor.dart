@@ -138,7 +138,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                               children: [
                                 Text(listData.toString()),
                                 Spacer(),
-                                if (vis)
+                                if (vis == true)
                                   ElevatedButton(
                                       onPressed: () {
                                         _list2.add(listData);

@@ -15,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String uid = "";
+  String uid = FirebaseAuth.instance.currentUser!.uid;
   String profilePicUrl = "";
   static String name = "";
   static String phone = "";
@@ -31,59 +31,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
       TextEditingController(text: userType);
 
   fetchData() async {
-    uid = FirebaseAuth.instance.currentUser!.uid;
     profilePicUrl = await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
         .get()
         .then((value) => value.data()!['imageUrl']);
-
-    setState(() {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((value) {
-        name = value.data()!["name"];
-      });
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((value) {
-        phone = value.data()!["phoneNumber"];
-      });
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((value) {
-        if (value.data()!["gender"]) {
-          gender = "Male";
-        } else if (value.data()!["gender"] == 2) {
-          gender = "Female";
-        } else {
-          gender = "Other";
-        }
-      });
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((value) {
-        if (value.data()!["userType"]) {
-          gender = "Doctor";
-        } else {
-          gender = "Patient";
-        }
-      });
-    });
   }
 
   @override
   void initState() {
-    fetchData();
     super.initState();
+    FirebaseFirestore.instance.collection('users').doc(uid).get().then((value) {
+      setState(() {
+        name = value.data()!["name"];
+      });
+    });
+    FirebaseFirestore.instance.collection('users').doc(uid).get().then((value) {
+      setState(() {
+        phone = value.data()!["phoneNumber"];
+      });
+    });
+    FirebaseFirestore.instance.collection('users').doc(uid).get().then((value) {
+      if (value.data()!["gender"] == 1) {
+        setState(() {
+          gender = "Male";
+        });
+      } else if (value.data()!["gender"] == 2) {
+        setState(() {
+          gender = "Female";
+        });
+      } else {
+        setState(() {
+          gender = "Other";
+        });
+      }
+    });
+    FirebaseFirestore.instance.collection('users').doc(uid).get().then((value) {
+      if (value.data()!["userType"] == 2) {
+        setState(() {
+          userType = "Patient";
+        });
+      } else {
+        setState(() {
+          userType = "Doctor";
+        });
+      }
+    });
+    fetchData();
   }
 
   @override

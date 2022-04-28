@@ -44,6 +44,7 @@ class HomeScreenState extends State<HomeScreen> {
   String result4 = "";
   int diastolic = 0;
   int systolic = 0;
+  String userName = " ";
 
   void initState() {
     super.initState();
@@ -53,6 +54,7 @@ class HomeScreenState extends State<HomeScreen> {
         .get()
         .then((value) {
       setState(() {
+        userName = value.data()!['name'];
         _list = value.data()!['doctors'];
       });
     });
@@ -60,18 +62,13 @@ class HomeScreenState extends State<HomeScreen> {
         .collection("readings")
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .collection("Oxygen")
+        .orderBy('timestamp', descending: true)
+        .limit(1)
         .get()
         .then((value) {
-      Timestamp max = value.docs.first.data()["timestamp"];
-      String oxyvalue = value.docs.first.data()["value"];
-      value.docs.forEach((element) {
-        if (max.compareTo(element.data()["timestamp"]).isNegative) {
-          max = element.data()["timestamp"];
-          oxyvalue = element.data()["value"];
-        }
-      });
+      int oxyvalue = value.docs.first.data()["value"];
       setState(() {
-        result = oxyvalue;
+        result = oxyvalue.toString();
       });
     });
     firestoreInstance
@@ -288,10 +285,10 @@ class HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        "Hi,\nPatient",
-                        style: TextStyle(
+                        "Hi,\n" + userName,
+                        style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.w900,
                             color: Colors.white),
