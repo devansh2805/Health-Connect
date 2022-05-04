@@ -198,17 +198,34 @@ class _CardiacScreenState extends State<CardiacScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
+                  int glucose = int.parse(glucoseController.text);
+                  if (glucose < 140) {
+                    glucose = 1;
+                  } else if (glucose >= 140 && glucose < 180) {
+                    glucose = 2;
+                  } else {
+                    glucose = 3;
+                  }
+                  int cholesterol = int.parse(cholesterolController.text);
+                  if (cholesterol < 100) {
+                    cholesterol = 1;
+                  } else if (cholesterol >= 100 && cholesterol < 140) {
+                    cholesterol = 2;
+                  } else {
+                    cholesterol = 3;
+                  }
                   CardiacModel cardiacModel = CardiacModel(
-                      age: int.parse(ageController.text),
-                      gender: gen,
-                      height: double.parse(heightController.text),
-                      weight: double.parse(weightController.text),
-                      systolic: int.parse(bpsController.text),
-                      diastolic: int.parse(bpdController.text),
-                      alcoholic: alco,
-                      smoker: smok,
-                      cholestrol: int.parse(cholesterolController.text),
-                      glucose: int.parse(glucoseController.text));
+                    age: int.parse(ageController.text),
+                    gender: gen,
+                    height: double.parse(heightController.text),
+                    weight: double.parse(weightController.text),
+                    systolic: int.parse(bpsController.text),
+                    diastolic: int.parse(bpdController.text),
+                    alcoholic: alco,
+                    smoker: smok,
+                    cholestrol: cholesterol,
+                    glucose: glucose,
+                  );
                   Cardiac cardiac = await cardiacModel.getCardiacResponse();
                   if (int.parse(cardiac.cardio) == 0) {
                     Navigator.pop(context);

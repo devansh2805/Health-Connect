@@ -8,7 +8,7 @@ class Communication {
       FlutterBluetoothSerial.instance;
   BluetoothConnection? bluetoothConnection;
   bool connectionState = false;
-
+  late StreamSubscription dataSubscription;
   Future<bool> initialize() async {
     connectionState = false;
     return await _askforEnablingBluetooth();
@@ -64,23 +64,11 @@ class Communication {
   Future<void> _connectToAddress(address) async {
     await BluetoothConnection.toAddress(address).then((connection) {
       bluetoothConnection = connection;
+      dataSubscription = bluetoothConnection!.input!.listen(null);
     }).catchError((error) {
       print(error);
       print('Cannot Connect to HealthConnect Device');
     });
-  }
-
-  String readMessage() {
-    String result = "";
-    try {
-      bluetoothConnection?.input?.listen((data) {
-        result = ascii.decode(data);
-      });
-      return result;
-    } catch (error) {
-      print(error);
-    }
-    return result;
   }
 
   Future<void> sendMessage(String text) async {

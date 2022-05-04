@@ -97,7 +97,6 @@ class HomeScreenState extends State<HomeScreen> {
         result4 = tempvalue.toString();
       });
     });
-
     firestoreInstance
         .collection('readings')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -111,7 +110,7 @@ class HomeScreenState extends State<HomeScreen> {
       setState(() {
         diastolic = dia;
         systolic = sys;
-        result3 = sys.toString() + "\\" + dia.toString();
+        result3 = sys.toString() + "/" + dia.toString();
       });
     });
   }
@@ -379,6 +378,20 @@ class HomeScreenState extends State<HomeScreen> {
                                                   ).then((value) {
                                                     setState(() {
                                                       result = value;
+                                                      firestoreInstance
+                                                          .collection(
+                                                              "readings")
+                                                          .doc(FirebaseAuth
+                                                              .instance
+                                                              .currentUser
+                                                              ?.uid)
+                                                          .collection("Oxygen")
+                                                          .add({
+                                                        "timestamp":
+                                                            Timestamp.now(),
+                                                        "value":
+                                                            int.parse(value),
+                                                      });
                                                     });
                                                   });
                                                 },
@@ -412,7 +425,8 @@ class HomeScreenState extends State<HomeScreen> {
                                                           .add({
                                                         "timestamp":
                                                             Timestamp.now(),
-                                                        "value": value
+                                                        "value":
+                                                            int.parse(value),
                                                       });
                                                     });
                                                   });
@@ -494,6 +508,21 @@ class HomeScreenState extends State<HomeScreen> {
                                                   ).then((value) {
                                                     setState(() {
                                                       result2 = value;
+                                                      firestoreInstance
+                                                          .collection(
+                                                              "readings")
+                                                          .doc(FirebaseAuth
+                                                              .instance
+                                                              .currentUser
+                                                              ?.uid)
+                                                          .collection(
+                                                              "HeartRate")
+                                                          .add({
+                                                        "timestamp":
+                                                            Timestamp.now(),
+                                                        "value":
+                                                            int.parse(value),
+                                                      });
                                                     });
                                                   });
                                                 },
@@ -516,6 +545,21 @@ class HomeScreenState extends State<HomeScreen> {
                                                   ).then((value) {
                                                     setState(() {
                                                       result2 = value;
+                                                      firestoreInstance
+                                                          .collection(
+                                                              "readings")
+                                                          .doc(FirebaseAuth
+                                                              .instance
+                                                              .currentUser
+                                                              ?.uid)
+                                                          .collection(
+                                                              "HeartRate")
+                                                          .add({
+                                                        "timestamp":
+                                                            Timestamp.now(),
+                                                        "value":
+                                                            int.parse(value),
+                                                      });
                                                     });
                                                   });
                                                 },
@@ -552,7 +596,16 @@ class HomeScreenState extends State<HomeScreen> {
                               }),
                             ).then((value) {
                               setState(() {
-                                result = value;
+                                result3 = value;
+                                firestoreInstance
+                                    .collection("readings")
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .collection("BloodPressure")
+                                    .add({
+                                  "timestamp": Timestamp.now(),
+                                  "systolic": int.parse(value.split("/")[0]),
+                                  "diastolic": int.parse(value.split("/")[1]),
+                                });
                               });
                             });
                           }),
@@ -576,7 +629,16 @@ class HomeScreenState extends State<HomeScreen> {
                               }),
                             ).then((value) {
                               setState(() {
-                                result = value;
+                                result4 =
+                                    double.parse(value).toInt().toString();
+                                firestoreInstance
+                                    .collection("readings")
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .collection("Temperature")
+                                    .add({
+                                  "timestamp": Timestamp.now(),
+                                  "value": double.parse(value).toInt(),
+                                });
                               });
                             });
                           }),
