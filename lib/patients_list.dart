@@ -10,94 +10,150 @@ class PatientsListScreen extends StatefulWidget {
 }
 
 class _PatientsListScreenState extends State<PatientsListScreen> {
-  List<CheckBoxListTileModel> checkBoxListTileModel =
-      CheckBoxListTileModel.getSymps();
-  bool value = false;
-  var symptomsList = [];
+  final TextEditingController _searchController = TextEditingController();
+  final firestoreInstance = FirebaseFirestore.instance;
+  List searchresult = [];
+  bool _isSearching = false;
+  List<dynamic> _list = [];
+  String _searchText = "";
+  String userName = " ";
+  List<dynamic> _list2 = [];
+  List _list12 = [];
+
+  @override
+  void initState() {
+    super.initState();
+    values();
+
+    firestoreInstance
+        .collection('users')
+        .orderBy('doctors')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        _list12 = element.data()["doctors"];
+        print(_list12);
+        if (_list12.contains(userName)) {
+          _list2.add(element.data()["uid"]);
+        }
+      });
+    });
+    print(_list2);
+    _list2.forEach((element) {
+      firestoreInstance.collection('users').doc(element).get().then((value) {
+        setState(() {
+          _list.add(value.data()!['name']);
+        });
+      });
+    });
+    _isSearching = false;
+  }
+
+  void values() async {
+    await firestoreInstance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        userName = value.data()!['name'];
+      });
+    });
+  }
+
+  _PatientsListScreenState() {
+    _searchController.addListener(() {
+      if (_searchController.text.isEmpty) {
+        setState(() {
+          _isSearching = false;
+          _searchText = "";
+        });
+      } else {
+        setState(() {
+          _isSearching = true;
+          _searchText = _searchController.text;
+        });
+      }
+    });
+  }
+
+  void search(String searchText) {
+    searchresult.clear();
+    if (_isSearching != null) {
+      for (int i = 0; i < _list.length; i++) {
+        String data = _list[i];
+        if (data.toLowerCase().contains(searchText.toLowerCase())) {
+          searchresult.add(data);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         backgroundColor: Constants.darkAccent,
         foregroundColor: Colors.white,
         title: const Text('View Patients'),
       ),
-      body: ListView.builder(
-          itemCount: checkBoxListTileModel.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: <Widget>[
-                    CheckboxListTile(
-                        activeColor: Colors.pink[300],
-                        dense: true,
-                        title: Text(
-                          checkBoxListTileModel[index].title,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5),
-                        ),
-                        value: checkBoxListTileModel[index].isCheck,
-                        secondary: const SizedBox(
-                          height: 50,
-                          width: 50,
-                        ),
-                        onChanged: (bool? val) {
-                          itemChange(val!, index);
-                        })
-                  ],
-                ),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(15.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: "Search",
+                suffixIcon: Icon(Icons.search),
               ),
-            );
-          }),
+              controller: _searchController,
+              onChanged: search,
+            ),
+          ),
+          Flexible(
+              child:
+                  searchresult.isNotEmpty || _searchController.text.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: searchresult.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            String listData = searchresult[index];
+                            return Container(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                              child: Row(
+                                children: [
+                                  Text(listData.toString()),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _list.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            String listData = _list[index];
+
+                            return Container(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                              child: Row(
+                                children: [
+                                  Text(listData.toString()),
+                                ],
+                              ),
+                            );
+                          },
+                        ))
+        ],
+      ),
     );
-  }
-
-  void itemChange(bool val, int index) {
-    setState(() {
-      checkBoxListTileModel[index].isCheck = val;
-    });
-  }
-
-  Future<void> saveFunction() async {
-    int num = checkBoxListTileModel.length;
-    for (var i = 0; i < num; i++) {
-      if (checkBoxListTileModel[i].isCheck == true) {
-        symptomsList.add(checkBoxListTileModel[i].title);
-      }
-    }
-    await FirebaseFirestore.instance.collection('userSymptoms').add({
-      'uid': FirebaseAuth.instance.currentUser!.uid,
-      'symptoms': symptomsList,
-      'time': Timestamp.now()
-    });
-    Navigator.pop(context);
-  }
-}
-
-class CheckBoxListTileModel {
-  int symId;
-  String title;
-  bool isCheck;
-
-  CheckBoxListTileModel(
-      {required this.symId, required this.title, required this.isCheck});
-
-  static List<CheckBoxListTileModel> getSymps() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(symId: 1, title: "Fever", isCheck: false),
-      CheckBoxListTileModel(symId: 2, title: "Runny Nose", isCheck: false),
-      CheckBoxListTileModel(symId: 3, title: "Cough", isCheck: false),
-      CheckBoxListTileModel(symId: 4, title: "Bodyache", isCheck: false),
-      CheckBoxListTileModel(symId: 5, title: "Fatigue", isCheck: false),
-      CheckBoxListTileModel(symId: 6, title: "Headache", isCheck: false),
-      CheckBoxListTileModel(symId: 7, title: "Vomiting", isCheck: false),
-      CheckBoxListTileModel(symId: 8, title: "Rash", isCheck: false),
-      CheckBoxListTileModel(symId: 9, title: "Nausea", isCheck: false),
-      CheckBoxListTileModel(symId: 10, title: "Diarrhoea", isCheck: false),
-    ];
   }
 }

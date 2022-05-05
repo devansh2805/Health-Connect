@@ -27,6 +27,7 @@ class DoctorScreenState extends State<DoctorScreen> {
   String userName = " ";
   List<dynamic> _list = [];
   List list2 = [];
+  List nameList = [];
   @override
   void initState() {
     super.initState();
@@ -38,19 +39,6 @@ class DoctorScreenState extends State<DoctorScreen> {
       setState(() {
         userName = value.data()!['name'];
       });
-    });
-    firestoreInstance
-        .collection('users')
-        .orderBy('doctors')
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        list2 = element.data()["doctors"];
-        if (list2.contains(userName)) {
-          _list.add(element.data()["uid"]);
-        }
-      });
-      print(_list);
     });
   }
 
@@ -160,7 +148,7 @@ class DoctorScreenState extends State<DoctorScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 80),
+                const SizedBox(height: 150),
 
                 // Main Cards - Heartbeat and Blood Pressure
                 const Text(
@@ -237,7 +225,7 @@ class DoctorScreenState extends State<DoctorScreen> {
                                             fontWeight: FontWeight.bold,
                                             color: Constants.textPrimary),
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(height: 10),
                                     ],
                                   ),
                                 )),

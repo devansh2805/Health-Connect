@@ -218,7 +218,7 @@ class HomeScreenState extends State<HomeScreen> {
             ListTile(
               minVerticalPadding: 20,
               title: const Text(
-                'Add Doctors',
+                'Edit Doctors',
                 style: TextStyle(
                   color: Constants.darkAccent,
                   fontSize: 22,

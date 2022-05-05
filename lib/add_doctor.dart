@@ -85,7 +85,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
       firestoreInstance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({'doctors': userDocList});
+          .update({'doctors': userDocList});
     });
   }
 
@@ -103,12 +103,12 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
           ),
           backgroundColor: Constants.darkAccent,
           foregroundColor: Colors.white,
-          title: const Text('Enter Data'),
+          title: const Text('Edit Doctors'),
         ),
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(15.0),
+              margin: const EdgeInsets.all(15.0),
               child: TextField(
                 decoration: const InputDecoration(
                   hintText: "Search",
@@ -136,10 +136,11 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                             vis = true;
                           }
                           return Container(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                             child: Row(
                               children: [
                                 Text(listData.toString()),
-                                Spacer(),
+                                const Spacer(),
                                 if (vis == true)
                                   ElevatedButton(
                                       onPressed: () {
@@ -180,10 +181,11 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                             vis = true;
                           }
                           return Container(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                             child: Row(
                               children: [
                                 Text(listData.toString()),
-                                Spacer(),
+                                const Spacer(),
                                 if (vis == true)
                                   ElevatedButton(
                                       onPressed: () {

@@ -115,12 +115,18 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    Text(
-                      alert,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: Text(
+                        alert,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     TextButton(
