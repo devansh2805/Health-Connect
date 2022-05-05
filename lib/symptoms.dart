@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
@@ -88,9 +90,53 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
     if (checkBoxListTileModel[0].isCheck &&
         checkBoxListTileModel[2].isCheck &&
         checkBoxListTileModel[3].isCheck) {
-      alert = "Please test yourself for Covid";
+      alert = "Please test yourself for Covid-19";
     }
     Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 10.0,
+            sigmaY: 10.0,
+          ),
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
+            ),
+            elevation: 5,
+            backgroundColor: Colors.indigo[50],
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.30,
+              width: MediaQuery.of(context).size.width - 10,
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      alert,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

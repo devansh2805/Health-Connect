@@ -391,6 +391,11 @@ class HomeScreenState extends State<HomeScreen> {
                                                             Timestamp.now(),
                                                         "value":
                                                             int.parse(value),
+                                                        "uid": FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid
+                                                            .toString(),
                                                       });
                                                     });
                                                   });
@@ -427,6 +432,11 @@ class HomeScreenState extends State<HomeScreen> {
                                                             Timestamp.now(),
                                                         "value":
                                                             int.parse(value),
+                                                        "uid": FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid
+                                                            .toString(),
                                                       });
                                                     });
                                                   });
@@ -522,6 +532,11 @@ class HomeScreenState extends State<HomeScreen> {
                                                             Timestamp.now(),
                                                         "value":
                                                             int.parse(value),
+                                                        "uid": FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid
+                                                            .toString(),
                                                       });
                                                     });
                                                   });
@@ -559,6 +574,11 @@ class HomeScreenState extends State<HomeScreen> {
                                                             Timestamp.now(),
                                                         "value":
                                                             int.parse(value),
+                                                        "uid": FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid
+                                                            .toString(),
                                                       });
                                                     });
                                                   });
@@ -605,6 +625,8 @@ class HomeScreenState extends State<HomeScreen> {
                                   "timestamp": Timestamp.now(),
                                   "systolic": int.parse(value.split("/")[0]),
                                   "diastolic": int.parse(value.split("/")[1]),
+                                  "uid": FirebaseAuth.instance.currentUser?.uid
+                                      .toString(),
                                 });
                               });
                             });
@@ -638,6 +660,8 @@ class HomeScreenState extends State<HomeScreen> {
                                     .add({
                                   "timestamp": Timestamp.now(),
                                   "value": double.parse(value).toInt(),
+                                  "uid": FirebaseAuth.instance.currentUser?.uid
+                                      .toString(),
                                 });
                               });
                             });

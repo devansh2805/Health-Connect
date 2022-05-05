@@ -1,6 +1,9 @@
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_connect/const.dart';
+import 'package:health_connect/patients_list.dart';
 import 'package:health_connect/symptoms.dart';
 import 'package:health_connect/profile_page.dart';
 import 'package:health_connect/widgets/custom_clipper.dart';
@@ -20,6 +23,37 @@ class DoctorScreen extends StatefulWidget {
 }
 
 class DoctorScreenState extends State<DoctorScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
+  String userName = " ";
+  List<dynamic> _list = [];
+  List list2 = [];
+  @override
+  void initState() {
+    super.initState();
+    firestoreInstance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        userName = value.data()!['name'];
+      });
+    });
+    firestoreInstance
+        .collection('users')
+        .orderBy('doctors')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        list2 = element.data()["doctors"];
+        if (list2.contains(userName)) {
+          _list.add(element.data()["uid"]);
+        }
+      });
+      print(_list);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -101,10 +135,10 @@ class DoctorScreenState extends State<DoctorScreen> {
                 // Header - Greetings and Avatar
                 Row(
                   children: <Widget>[
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        "Hi,\nDoctor",
-                        style: TextStyle(
+                        "Hi,\nDoctor " + userName,
+                        style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.w900,
                             color: Colors.white),
@@ -189,7 +223,7 @@ class DoctorScreenState extends State<DoctorScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const SymptomsScreen()),
+                                            const PatientsListScreen()),
                                   ),
                                   child: Column(
                                     crossAxisAlignment:

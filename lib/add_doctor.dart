@@ -81,10 +81,12 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
   }
 
   void addDoc(List userDocList) {
-    firestoreInstance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({'doctors': userDocList});
+    setState(() {
+      firestoreInstance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({'doctors': userDocList});
+    });
   }
 
   @override
@@ -148,7 +150,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                                         });
                                       },
                                       child: const Text("Add"))
-                                else
+                                else if (vis == false)
                                   ElevatedButton(
                                       onPressed: () {
                                         _list2.remove(listData);
@@ -182,20 +184,26 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                               children: [
                                 Text(listData.toString()),
                                 Spacer(),
-                                Visibility(
-                                    visible: vis,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _list2.add(listData.toString());
-                                            firestoreInstance
-                                                .collection('users')
-                                                .doc(FirebaseAuth
-                                                    .instance.currentUser!.uid)
-                                                .update({'doctors': _list2});
-                                          });
-                                        },
-                                        child: Text("Add")))
+                                if (vis == true)
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        _list2.add(listData);
+                                        addDoc(_list2);
+                                        setState(() {
+                                          vis = !vis;
+                                        });
+                                      },
+                                      child: const Text("Add"))
+                                else if (vis == false)
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        _list2.remove(listData);
+                                        addDoc(_list2);
+                                        setState(() {
+                                          vis = !vis;
+                                        });
+                                      },
+                                      child: const Text("Remove"))
                               ],
                             ),
                           );
