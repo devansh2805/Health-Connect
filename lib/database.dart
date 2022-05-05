@@ -12,4 +12,16 @@ class Database {
       return true;
     }
   }
+
+  Future<int> getUserType(String? phoneNumber) async {
+    int userType = 2;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where('phoneNumber', isEqualTo: phoneNumber)
+        .get()
+        .then((value) {
+      userType = value.docs.first.data()['userType'];
+    });
+    return userType;
+  }
 }

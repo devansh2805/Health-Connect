@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_connect/patient_screen.dart';
 import 'package:camera/camera.dart';
+import 'package:health_connect/doctor.dart';
 
 class Auth {
   final CameraDescription camera;
@@ -92,16 +93,31 @@ class Auth {
                     if (user != null) {
                       if (await Database()
                           .userAlreadyRegistered(user.phoneNumber)) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return HomeScreen(
-                                camera: camera,
-                              );
-                            },
-                          ),
-                        );
+                        int userType =
+                            await Database().getUserType(user.phoneNumber);
+                        if (userType == 2) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return HomeScreen(
+                                  camera: camera,
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return DoctorScreen(
+                                  camera: camera,
+                                );
+                              },
+                            ),
+                          );
+                        }
                       } else {
                         Navigator.pushReplacement(
                           context,
