@@ -10,56 +10,16 @@ class PatientsListScreen extends StatefulWidget {
 }
 
 class _PatientsListScreenState extends State<PatientsListScreen> {
+  @override
   final TextEditingController _searchController = TextEditingController();
   final firestoreInstance = FirebaseFirestore.instance;
   List searchresult = [];
   bool _isSearching = false;
-  List<dynamic> _list = [];
+  List<dynamic> list = [];
   String _searchText = "";
   String userName = " ";
-  List<dynamic> _list2 = [];
-  List _list12 = [];
-
-  @override
-  void initState() {
-    super.initState();
-    values();
-
-    firestoreInstance
-        .collection('users')
-        .orderBy('doctors')
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        _list12 = element.data()["doctors"];
-        print(_list12);
-        if (_list12.contains(userName)) {
-          _list2.add(element.data()["uid"]);
-        }
-      });
-    });
-    print(_list2);
-    _list2.forEach((element) {
-      firestoreInstance.collection('users').doc(element).get().then((value) {
-        setState(() {
-          _list.add(value.data()!['name']);
-        });
-      });
-    });
-    _isSearching = false;
-  }
-
-  void values() async {
-    await firestoreInstance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        userName = value.data()!['name'];
-      });
-    });
-  }
+  List<dynamic> list2 = [];
+  List list12 = [];
 
   _PatientsListScreenState() {
     _searchController.addListener(() {
@@ -77,11 +37,55 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    values();
+    _isSearching = false;
+  }
+
+  void values() {
+    firestoreInstance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        userName = value.data()!['name'];
+      });
+    });
+    firestoreInstance
+        .collection('users')
+        .where('userType', isEqualTo: 2)
+        .get()
+        .then((value) {
+      value.docs.asMap().forEach((key, values) {
+        list12 = values.data()["doctors"];
+        print(list12);
+        if (list12.contains(userName)) {
+          list2.add(values.data()["uid"]);
+        }
+      });
+      print(list2);
+    });
+    list2.forEach((element) {
+      firestoreInstance
+          .collection('users')
+          .doc(element.toString())
+          .get()
+          .then((value) {
+        setState(() {
+          list.add(value.data()!["name"]);
+        });
+      });
+    });
+  }
+
   void search(String searchText) {
     searchresult.clear();
     if (_isSearching != null) {
-      for (int i = 0; i < _list.length; i++) {
-        String data = _list[i];
+      for (int i = 0; i < list.length; i++) {
+        String data = list[i];
         if (data.toLowerCase().contains(searchText.toLowerCase())) {
           searchresult.add(data);
         }
@@ -138,9 +142,9 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: _list.length,
+                          itemCount: list.length,
                           itemBuilder: (BuildContext context, int index) {
-                            String listData = _list[index];
+                            String listData = list[index];
 
                             return Container(
                               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
