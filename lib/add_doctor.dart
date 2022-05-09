@@ -68,6 +68,42 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
     });
   }
 
+  void addPatient(String data) async {
+    List pat = [];
+    String userId = "";
+    await firestoreInstance
+        .collection("users")
+        .where("name", isEqualTo: data)
+        .get()
+        .then((value) {
+      pat = value.docs.first.data()["patients"];
+      userId = value.docs.first.data()["uid"];
+    });
+    pat.add(FirebaseAuth.instance.currentUser!.uid.toString());
+    await firestoreInstance
+        .collection('users')
+        .doc(userId)
+        .update({'patients': pat});
+  }
+
+  void deletePatient(String data) async {
+    List pat = [];
+    String userId = "";
+    await firestoreInstance
+        .collection("users")
+        .where("name", isEqualTo: data)
+        .get()
+        .then((value) {
+      pat = value.docs.first.data()["patients"];
+      userId = value.docs.first.data()["uid"];
+    });
+    pat.remove(FirebaseAuth.instance.currentUser!.uid.toString());
+    await firestoreInstance
+        .collection('users')
+        .doc(userId)
+        .update({'patients': pat});
+  }
+
   void search(String searchText) {
     searchresult.clear();
     if (_isSearching != null) {
@@ -126,9 +162,6 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                         itemCount: searchresult.length,
                         itemBuilder: (BuildContext context, int index) {
                           String listData = searchresult[index];
-                          List<String> name =
-                              (listData.toString().toLowerCase()).split(" ");
-                          String imgname = name[0];
                           bool vis = true;
                           if (_list2.contains(listData.toString())) {
                             vis = false;
@@ -149,6 +182,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                                         setState(() {
                                           vis = !vis;
                                         });
+                                        addPatient(listData.toString());
                                       },
                                       child: const Text("Add"))
                                 else if (vis == false)
@@ -159,6 +193,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                                         setState(() {
                                           vis = !vis;
                                         });
+                                        deletePatient(listData.toString());
                                       },
                                       child: const Text("Remove"))
                               ],
@@ -171,9 +206,6 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                         itemCount: _list.length,
                         itemBuilder: (BuildContext context, int index) {
                           String listData = _list[index];
-                          List<String> name =
-                              (listData.toString().toLowerCase()).split(" ");
-                          String imgname = name[0];
                           bool vis = true;
                           if (_list2.contains(listData.toString())) {
                             vis = false;
@@ -194,6 +226,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                                         setState(() {
                                           vis = !vis;
                                         });
+                                        addPatient(listData.toString());
                                       },
                                       child: const Text("Add"))
                                 else if (vis == false)
@@ -204,6 +237,7 @@ class _AddDoctorScreenState extends State<AddDoctorScreen> {
                                         setState(() {
                                           vis = !vis;
                                         });
+                                        deletePatient(listData.toString());
                                       },
                                       child: const Text("Remove"))
                               ],

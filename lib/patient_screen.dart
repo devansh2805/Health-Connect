@@ -45,9 +45,19 @@ class HomeScreenState extends State<HomeScreen> {
   int diastolic = 0;
   int systolic = 0;
   String userName = " ";
+  String profilePicUrl = "";
 
   void initState() {
     super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        profilePicUrl = value.data()!['imageUrl'];
+      });
+    });
     firestoreInstance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -302,10 +312,13 @@ class HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 26.0,
-                        backgroundImage:
-                            AssetImage('assets/icons/default_picture.png'),
+                        backgroundImage: profilePicUrl == ""
+                            ? const AssetImage(
+                                    "assets/icons/default_picture.png")
+                                as ImageProvider
+                            : NetworkImage(profilePicUrl),
                       ),
                     ),
                   ],
@@ -690,7 +703,7 @@ class HomeScreenState extends State<HomeScreen> {
                           return CardSection(
                               title: listData,
                               picture: const AssetImage(
-                                  'assets/icons/profile_picture.png'));
+                                  'assets/icons/default_picture.png'));
                         })),
                 const SizedBox(height: 50),
                 const Text(

@@ -9,19 +9,18 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 
-class ReportScreen extends StatefulWidget {
-  const ReportScreen({Key? key}) : super(key: key);
-
+class ReportDocScreen extends StatefulWidget {
+  const ReportDocScreen({Key? key, required this.patUid}) : super(key: key);
+  final String patUid;
   @override
-  State<ReportScreen> createState() => ReportScreenState();
+  State<ReportDocScreen> createState() => ReportDocScreenState();
 }
 
-class ReportScreenState extends State<ReportScreen> {
-  String uid = "";
+class ReportDocScreenState extends State<ReportDocScreen> {
   List urls = [];
   List names = [];
   void fetchData() async {
-    uid = FirebaseAuth.instance.currentUser!.uid;
+    String uid = widget.patUid;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -89,36 +88,6 @@ class ReportScreenState extends State<ReportScreen> {
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.file_upload_outlined),
-        label: const Text(
-          "Upload Report",
-        ),
-        onPressed: () async {
-          FilePickerResult? result = await FilePicker.platform.pickFiles(
-            type: FileType.custom,
-            allowedExtensions: ['pdf'],
-          );
-          if (result != null) {
-            String? path = result.files.single.path;
-            if (path != null) {
-              File file = File(path);
-              final Reference firebaseStorageRef = FirebaseStorage.instance
-                  .ref()
-                  .child('reports/$uid/${result.files.single.name}');
-              final TaskSnapshot taskSnapshot =
-                  await firebaseStorageRef.putFile(file);
-              String url = await taskSnapshot.ref.getDownloadURL();
-              await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(uid)
-                  .collection('reports')
-                  .add({"link": url, "name": result.files.single.name});
-              setState(() {});
-            }
-          }
-        },
       ),
     );
   }
