@@ -124,17 +124,15 @@ class _PatientDetailsDocScreenState extends State<PatientDetailsDocScreen> {
         .collection("readings")
         .doc(widget.patUid.toString())
         .collection("BloodPressure")
-        .orderBy('timestamp', descending: true)
+        .orderBy("timestamp", descending: true)
         .limit(1)
         .get()
         .then((value) {
       setState(() {
         bp = value.docs.first.data()["diastolic"].toString() +
             "/" +
-            value.docs.first.data()["systolic"];
-      });
-      setState(() {
-        thr = DateTime.parse(
+            value.docs.first.data()["systolic"].toString();
+        tbp = DateTime.parse(
                 value.docs.first.data()["timestamp"].toDate().toString())
             .toString()
             .substring(0, 10);

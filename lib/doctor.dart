@@ -33,6 +33,7 @@ class DoctorScreenState extends State<DoctorScreen> {
   List nameList = [];
   String patientName = "";
   List<dynamic> _list = [];
+  String profilePicUrl = "";
   Query usersref = FirebaseFirestore.instance
       .collection("users")
       .where('userType', isEqualTo: 2);
@@ -47,6 +48,7 @@ class DoctorScreenState extends State<DoctorScreen> {
       setState(() {
         userName = value.data()!['name'];
         _list = value.data()!['patients'];
+        profilePicUrl = value.data()!['imageUrl'];
         _list.forEach((element) {
           firestoreInstance
               .collection("users")
@@ -212,7 +214,12 @@ class DoctorScreenState extends State<DoctorScreen> {
                     fontSize: 22,
                     fontWeight: FontWeight.w200,
                   )),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileScreen()));
+              },
             ),
             ListTile(
               minVerticalPadding: 20,
@@ -281,10 +288,13 @@ class DoctorScreenState extends State<DoctorScreen> {
                             MaterialPageRoute(
                                 builder: (context) => const ProfileScreen()));
                       },
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 26.0,
-                        backgroundImage:
-                            AssetImage('assets/icons/default_picture.png'),
+                        backgroundImage: profilePicUrl == ""
+                            ? const AssetImage(
+                                    "assets/icons/default_picture.png")
+                                as ImageProvider
+                            : NetworkImage(profilePicUrl),
                       ),
                     ),
                   ],
